@@ -1,0 +1,940 @@
+-- phpMyAdmin SQL Dump
+-- version 3.4.11.1deb2+deb7u2
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: May 02, 2016 at 01:26 PM
+-- Server version: 5.5.47
+-- PHP Version: 5.5.33-1~dotdeb+7.1
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Database: `web_tools`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `APPMETA`
+--
+
+CREATE TABLE IF NOT EXISTS `APPMETA` (
+  `PK_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `DESC` varchar(300) NOT NULL,
+  `RESTRICTTOHOSTTYPE` varchar(3) NOT NULL,
+  `NUMBEROFITEMS` int(11) NOT NULL,
+  `BASEDIRECTORY` varchar(300) NOT NULL,
+  `CREATEDBYUSERID` int(11) NOT NULL,
+  `CREATEDBYUSERNAME` varchar(200) NOT NULL,
+  `CREATEDUNDERORGID` int(11) NOT NULL,
+  `CREATEDUNDERORGNAME` varchar(200) NOT NULL,
+  `OWNEDBYORGID` int(11) NOT NULL,
+  `OWNEDBYORGNAME` varchar(200) NOT NULL,
+  `CHANGELOGNAME` varchar(200) NOT NULL,
+  `NAMEWITHSPACES` varchar(300) NOT NULL,
+  `IS_PUBLISHED` tinyint(3) NOT NULL,
+  `STAGENAME` varchar(300) NOT NULL COMMENT 'A DIFFERENT NAME USED TEST APP',
+  `APPDBNAME` varchar(32) NOT NULL,
+  PRIMARY KEY (`PK_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `circleindex`
+--
+
+CREATE TABLE IF NOT EXISTS `circleindex` (
+  `pk_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `from_ID` int(11) NOT NULL,
+  `to_ID` int(11) NOT NULL,
+  `name` varchar(20) NOT NULL,
+  PRIMARY KEY (`pk_ID`),
+  KEY `new_index` (`from_ID`,`to_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `counters`
+--
+
+CREATE TABLE IF NOT EXISTS `counters` (
+  `pk_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `k_count_name` varchar(20) NOT NULL COMMENT 'unique',
+  `count_integer` int(11) NOT NULL,
+  PRIMARY KEY (`pk_ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `counters`
+--
+
+INSERT INTO `counters` (`pk_ID`, `k_count_name`, `count_integer`) VALUES
+(1, 'guestSessions', 302);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `maps`
+--
+
+CREATE TABLE IF NOT EXISTS `maps` (
+  `pk_map_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ratia_name` varchar(20) NOT NULL,
+  `request` varchar(120) NOT NULL,
+  `resource` varchar(120) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `date_updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `unique_req_count` int(11) DEFAULT NULL COMMENT 'Whenever a load succedes it increments this, should be a trigger in the db.. \nGets reset at an increasing rate with the amount of traffic being recieved on\nthe req_namespace, the time it was reset is the same as map_last_cleaned,\nthis is recorded in an ar',
+  `actual_count` int(11) DEFAULT NULL,
+  `fk_ratia_id` int(11) DEFAULT NULL,
+  `is_channeled` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'if it is true the requested does not get system prepended menu or header',
+  `mimetype` varchar(20) NOT NULL,
+  `needs_handler` tinyint(1) NOT NULL DEFAULT '0',
+  `comment` varchar(120) NOT NULL,
+  `is_top` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`pk_map_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='This just maps urls to files' AUTO_INCREMENT=50 ;
+
+--
+-- Dumping data for table `maps`
+--
+
+INSERT INTO `maps` (`pk_map_id`, `ratia_name`, `request`, `resource`, `date_added`, `date_updated`, `unique_req_count`, `actual_count`, `fk_ratia_id`, `is_channeled`, `mimetype`, `needs_handler`, `comment`, `is_top`) VALUES
+(1, 'superorg', '/', '/sapps/superorg/superorg.php', '2012-08-08 21:20:30', '2012-08-08 21:20:30', 0, 0, 0, 0, '', 0, '', 1),
+(2, 'robots.txt', '/robots.txt', '/sapps/botz/robots.php', '2012-08-08 21:21:30', '2012-08-08 21:21:30', 0, 0, 0, 1, '', 0, '', 1),
+(31, 'applications', '/', '/app-logic/system-apps/application/application.php', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0, 1, '', 0, '', 0),
+(33, 'pplapps', '/', '/pplapps/pplapps.php', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0, 0, '', 0, '', 1),
+(34, 'tools', '/addname.php', '/stools/addname.php', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0, 0, '', 0, ' a tool', 0),
+(35, 'root', '/', '/stools/stools.php', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0, 0, '', 0, 'building access', 1),
+(36, 'tools', '/subscribe.php', '/stools/subscribe.php', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0, 0, '', 0, '', 0),
+(37, 'organizations', '/', '/stools/addmap.php', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0, 0, '', 0, '', 1),
+(38, 'tools', '/addmap.php', '/stools/addmap.php', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0, 0, '', 0, '', 0),
+(39, 'metalfreaks', '/', '/sapps/organizations/organizations.php', '2012-08-20 06:05:21', '2012-08-20 06:05:21', 0, 0, 0, 0, '', 0, '', 1),
+(40, 'myfirstapp', '/', '/oapps/myfirstapp/myfirstapp.php', '2012-08-20 06:10:45', '2012-08-20 06:10:45', 0, 0, 0, 0, '', 0, '', 0),
+(41, 'palacegate', '/', '/app-logic/system-apps/network/network.php', '2012-08-20 22:49:40', '2012-08-20 22:49:40', 0, 0, 0, 0, '', 0, '', 1),
+(42, 'tools', '/bDb.php', '/stools/bDb.php', '2012-08-21 11:22:33', '2012-08-21 11:22:33', 0, 0, 0, 0, '', 0, '', 0),
+(44, 'crumb', '/addname.php', '/stools/addname.php', '2013-01-11 02:18:01', '2013-01-11 02:18:01', 0, 0, 0, 0, '', 0, 'a tool', 0),
+(45, 'crumb', '/imageloader.php', '/stools/imgloader.php', '2015-01-06 23:23:25', '2015-01-06 23:23:25', 0, 0, 0, 0, '', 0, '', 0),
+(46, 'crumb', '/crumb', '/app-logic/sytem-apps/crumb/loader.php', '2015-01-06 23:23:25', '2015-01-06 23:23:25', NULL, NULL, NULL, 1, '', 0, '', 1),
+(47, 'tools', '/', '/app-logic/system-apps/network/listlocalroutes.php', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0, 0, '', 0, ' a tool', 0),
+(48, 'crumb', '/', '/app-logic/system-apps/network/listlocalroutes.php', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, 0, 0, '', 0, ' a tool', 0),
+(49, 'tools', '', '', '2016-03-08 21:55:45', '2016-03-08 21:55:45', NULL, NULL, NULL, 0, '', 0, '', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ORGAPPLOOK`
+--
+
+CREATE TABLE IF NOT EXISTS `ORGAPPLOOK` (
+  `PK_ID` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`PK_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ORGLOOK`
+--
+
+CREATE TABLE IF NOT EXISTS `ORGLOOK` (
+  `PK_ID` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`PK_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ORGMETA`
+--
+
+CREATE TABLE IF NOT EXISTS `ORGMETA` (
+  `PK_ID` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`PK_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `PROAPPLOOK`
+--
+
+CREATE TABLE IF NOT EXISTS `PROAPPLOOK` (
+  `PK_ID` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`PK_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `PROFILES`
+--
+
+CREATE TABLE IF NOT EXISTS `PROFILES` (
+  `PKID` int(11) NOT NULL AUTO_INCREMENT,
+  `FKUSERID` int(11) NOT NULL,
+  `FKRATIAID` int(11) NOT NULL,
+  `ISROBOT` tinyint(3) unsigned zerofill NOT NULL,
+  `ISACTIVATED` tinyint(3) unsigned zerofill NOT NULL,
+  `ISPUBLIC` tinyint(3) unsigned zerofill NOT NULL,
+  `NAME` tinyint(3) unsigned zerofill NOT NULL,
+  PRIMARY KEY (`PKID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=FIXED AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `PROLOOK`
+--
+
+CREATE TABLE IF NOT EXISTS `PROLOOK` (
+  `PK_ID` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`PK_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `PROMETA`
+--
+
+CREATE TABLE IF NOT EXISTS `PROMETA` (
+  `PK_ID` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`PK_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ratiatable`
+--
+
+CREATE TABLE IF NOT EXISTS `ratiatable` (
+  `pk_id` int(11) NOT NULL AUTO_INCREMENT,
+  `k_name` varchar(16) NOT NULL,
+  `lock_key` varchar(40) NOT NULL,
+  `type` varchar(16) NOT NULL COMMENT 'must be {sysnet,sysapp,openet,openapp,profile,proapp}',
+  `parent` varchar(16) NOT NULL DEFAULT '/',
+  `is_top` tinyint(1) NOT NULL DEFAULT '0',
+  `is_host` tinyint(1) NOT NULL DEFAULT '0',
+  `host_type` varchar(16) NOT NULL COMMENT 'must be {sysnet,openet,profile,self,null}',
+  `ACCEPTEDHOSTTYPE` varchar(16) NOT NULL DEFAULT 'null' COMMENT 'none,profile,organization',
+  `CANBESTAGED` tinyint(3) unsigned zerofill NOT NULL COMMENT 'CAN BE SUBSCRIBED TO BY A STAGE - IN OTHER WORDS A TEMPLATE CREATED FROM DEVELOPMENT META DATUM FOR THIS NAME CAN BE USED TO BUILD A STAGE THAT INCLUDES CONTRTIBUTORS AND OTHERS AS MEMBERS PLACED IN CIRCLES BASED ON INVOLVEMENT WITH APP - STAGES CAN BE CL',
+  `RESTRICTHOSTTYPETO` varchar(30) NOT NULL COMMENT 'CAN BE {SYSTEM,USER,ROBOT} THESE ARE THE DIFFERENT TYPES OF PROFILES AND ORGANIZATIONS - APPS SHOULD BE BUILT SPECIFICALLY TO EACH INDIVIDUALLY - HOWEVER THEY CAN SHARE TOOL SETS SELECTED DURING APP CREATION - ALL ORGANIZATIONS AND PROFILE TYPES CAN BE',
+  `ISSTAGE` tinyint(3) unsigned zerofill NOT NULL,
+  PRIMARY KEY (`pk_id`),
+  UNIQUE KEY `k_name` (`k_name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=38 ;
+
+--
+-- Dumping data for table `ratiatable`
+--
+
+INSERT INTO `ratiatable` (`pk_id`, `k_name`, `lock_key`, `type`, `parent`, `is_top`, `is_host`, `host_type`, `ACCEPTEDHOSTTYPE`, `CANBESTAGED`, `RESTRICTHOSTTYPETO`, `ISSTAGE`) VALUES
+(8, 'tools', 'd9b3352197bfeb40977fc521317a85b6', 'sysapp', '/', 0, 0, '', 'null', 000, '', 000),
+(9, 'root', 'b5fba9ff24d0045d1377a05a46b32f68', 'sysnet', '/', 1, 0, '', 'null', 000, '', 000),
+(16, 'organizations', 'cf6147ea3c50e3d4a4c84afa1e36be5f', 'sysapp', '/', 1, 0, '', 'null', 000, '', 000),
+(17, 'metalfreaks', '454252af02bbc8626ed5e94c0aa21981', 'openet', '/', 1, 0, '', 'null', 000, '', 000),
+(28, 'palacegate', 'fb487de619baf6fbd7ead91ecbac9d38', 'sysnet', '/', 1, 0, '', 'null', 000, '', 000),
+(29, 'applications', '63dc4fc97a777c85d6a03cf20edea2a2', 'sysapp', '/', 1, 0, '', 'null', 000, '', 000),
+(30, 'profiles', '10730167c35ac8628fa94277d87f13f6', 'sysapp', '/', 1, 0, '', 'null', 000, '', 000),
+(31, 'crumb', 'cd11a84cdceefea49a53d63720690485', 'sysapp', '/', 0, 0, '', 'null', 000, '', 000),
+(32, '', '61f96b91f8c11d25aba1c07fa704c80c', 'sapp', '/', 0, 0, '', 'null', 000, '', 000),
+(33, 'NewSpace', '734acba449fb893f1123d823ec61c71f', 'sorg', '/', 1, 0, '', 'null', 000, '', 000),
+(34, 'notrouble', '77326853acc13f272c2e514bd34ca282', 'papp', '/', 0, 0, '', 'null', 000, '', 000),
+(35, 'renewalbyanderse', '7688342ffe6e56b4cc493de27581b1f2', 'org', '/', 1, 0, '', 'null', 000, '', 000),
+(36, 'crosscutproperti', '86da9d2a01483bfa913a1beec29a2e7a', 'org', '/', 1, 0, '', 'null', 000, '', 000),
+(37, 'crosscutproperty', '84ec39e1db29223f118e42e4ed98e7a9', 'org', '/', 1, 0, '', 'null', 000, '', 000);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `running`
+--
+
+CREATE TABLE IF NOT EXISTS `running` (
+  `pk_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `resource` varchar(120) DEFAULT NULL,
+  `provider` varchar(45) NOT NULL,
+  `client_ip` varchar(45) NOT NULL,
+  `uses_channel` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'uses channel for a semi stateful experience',
+  `query` varchar(120) DEFAULT NULL,
+  `client_live_last` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `client_live_auth` varchar(40) DEFAULT NULL COMMENT 'authorized via channel on provider - does not add another run unless auth failed or non channel data called - sess still verifies but does not update - Shaving as much as I can for a peppy live experience',
+  `client_live_auth_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `client_live_min_interval` time DEFAULT NULL,
+  `client` varchar(50) DEFAULT NULL,
+  `session_handle` varchar(50) DEFAULT NULL,
+  `referer` varchar(120) DEFAULT NULL,
+  `agent` varchar(45) NOT NULL,
+  `has_errors` tinyint(1) NOT NULL DEFAULT '0',
+  `start_bench` datetime NOT NULL,
+  `finish_bench` datetime NOT NULL,
+  `stateless_id` varchar(50) NOT NULL,
+  `update_bench_start` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `update_bench_finish` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `is_broken` tinyint(1) NOT NULL DEFAULT '0',
+  `client_live_broken_ack` tinyint(1) NOT NULL DEFAULT '0',
+  `update_agent` varchar(50) NOT NULL,
+  `client_live_last_agent` varchar(50) NOT NULL,
+  `update_referer` varchar(120) DEFAULT NULL,
+  `last_ip` varchar(45) NOT NULL,
+  `URI_CALLED` varchar(150) NOT NULL,
+  `expiration_time` double DEFAULT NULL,
+  `client_key` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`pk_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3725 ;
+
+--
+-- Dumping data for table `running`
+--
+
+INSERT INTO `running` (`pk_id`, `resource`, `provider`, `client_ip`, `uses_channel`, `query`, `client_live_last`, `client_live_auth`, `client_live_auth_time`, `client_live_min_interval`, `client`, `session_handle`, `referer`, `agent`, `has_errors`, `start_bench`, `finish_bench`, `stateless_id`, `update_bench_start`, `update_bench_finish`, `is_broken`, `client_live_broken_ack`, `update_agent`, `client_live_last_agent`, `update_referer`, `last_ip`, `URI_CALLED`, `expiration_time`, `client_key`) VALUES
+(3491, '/stools/addmap.php', 'stools', '72.160.224.94', 0, '', '2014-02-22 08:39:24', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle127@root', 'df9b813912933308ad80014dfd18d466', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) ', 0, '2014-02-22 02:39:24', '2014-02-22 02:39:24', '004efaa5319889f5d8b393981326ed1c', '2014-02-22 08:39:28', '2014-02-22 08:39:28', 1, 0, '', '', NULL, '72.160.224.94', '/switch/root/stools/addmap.php', NULL, '622a06183cbed3158df65d09dde76fb4'),
+(3493, '/stools/addmap.php', 'stools', '72.160.224.94', 0, '', '2014-02-22 08:52:13', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle127@root', 'df9b813912933308ad80014dfd18d466', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) ', 0, '2014-02-22 02:52:13', '2014-02-22 02:52:13', '4a32554cbbcfc6d354fb266082361727', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/root/stools/addmap.php', NULL, '622a06183cbed3158df65d09dde76fb4'),
+(3494, '/stools/addmap.php', 'stools', '72.160.224.94', 0, '', '2014-02-22 08:55:35', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle127@root', 'df9b813912933308ad80014dfd18d466', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) ', 0, '2014-02-22 02:55:35', '2014-02-22 02:55:35', '1aef297fe1ce03631092b67e009b6fc6', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/root/stools/addmap.php', NULL, '622a06183cbed3158df65d09dde76fb4'),
+(3495, '/stools/addmap.php', 'stools', '72.160.224.94', 0, '', '2014-02-22 08:59:39', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle127@root', 'df9b813912933308ad80014dfd18d466', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) ', 0, '2014-02-22 02:59:39', '2014-02-22 02:59:39', '79b6fe3e9e59597bf5a523d9a35c7032', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/root/stools/addmap.php', NULL, '622a06183cbed3158df65d09dde76fb4'),
+(3496, '/stools/addmap.php', 'stools', '72.160.224.94', 0, '', '2014-02-22 09:00:05', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle127@root', 'df9b813912933308ad80014dfd18d466', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) ', 0, '2014-02-22 03:00:05', '2014-02-22 03:00:05', '3272cc6985a230495da42a2f2ac5d108', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/root/stools/addmap.php', NULL, '622a06183cbed3158df65d09dde76fb4'),
+(3497, '/stools/addmap.php', 'stools', '72.160.224.94', 0, '', '2014-02-22 09:00:10', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle127@root', 'df9b813912933308ad80014dfd18d466', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) ', 0, '2014-02-22 03:00:10', '2014-02-22 03:00:10', '26e019c4f47f9a87ac482984414f7dc3', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/root/stools/addmap.php', NULL, '622a06183cbed3158df65d09dde76fb4'),
+(3498, '/stools/addmap.php', 'stools', '72.160.224.94', 0, '', '2014-02-22 09:01:11', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle127@root', 'df9b813912933308ad80014dfd18d466', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) ', 0, '2014-02-22 03:01:11', '2014-02-22 03:01:11', 'bc0d946dde06dc488cddee6462089e9b', '2014-02-22 09:06:09', '2014-02-22 09:06:09', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) Gecko', '', '', '72.160.224.94', '/switch/root/stools/addmap.php', NULL, '622a06183cbed3158df65d09dde76fb4'),
+(3499, '/stools/addmap.php', 'stools', '174.124.27.210', 0, '', '2014-02-24 05:52:41', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle128@root', '06d6d764f0d46c1a2afb9541c5c804e4', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) ', 0, '2014-02-23 23:52:41', '2014-02-23 23:52:41', '5f6a837b6a89cba5959f5ab9b1040a9a', '2014-02-24 08:09:44', '2014-02-24 08:09:44', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) Gecko', '', '', '174.124.27.210', '/switch/root/stools/addmap.php', NULL, '69e9ace55e5f1975d04e665059c32819'),
+(3500, '/app-logic/system-apps/network/network.php', 'palacegate', '174.124.27.210', 0, '', '2014-02-24 08:18:46', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle128@palacegate', '06d6d764f0d46c1a2afb9541c5c804e4', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) ', 0, '2014-02-24 02:18:46', '2014-02-24 02:18:46', 'a6e6749a2ee486cf6ac6923b0530ae8c', '2014-02-24 12:42:19', '2014-02-24 12:42:19', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) Gecko', '', '', '174.124.27.210', '/switch/palacegate', NULL, '69e9ace55e5f1975d04e665059c32819'),
+(3501, '/app-logic/system-apps/network/network.php', 'palacegate', '174.124.54.248', 0, '', '2014-02-25 20:58:49', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle129@palacegate', '8e5cf6f79ca273aa8c10b875f9fc9502', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2014-02-25 14:58:49', '2014-02-25 14:58:49', 'f162a8df253f571b427d00bbab879725', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, 'fe62b3217a119de93b4492f4d8e398c8'),
+(3502, '/app-logic/system-apps/network/network.php', 'palacegate', '69.179.88.59', 0, '', '2014-02-26 21:34:49', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle130@palacegate', '1d921d1a0a43a97dbd310aeabc2e5d90', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) ', 0, '2014-02-26 15:34:49', '2014-02-26 15:34:49', '6977323a8063f36d8031a4e581295f8d', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '31eba4e5d6fd612fcf5c75ac77869b2a'),
+(3503, '/stools/addmap.php', 'stools', '69.179.88.59', 0, '', '2014-02-26 21:35:03', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle130@root', '1d921d1a0a43a97dbd310aeabc2e5d90', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) ', 0, '2014-02-26 15:35:03', '2014-02-26 15:35:03', '04424a4313afab412bbdbc68d7227434', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/root/stools/addmap.php', NULL, '31eba4e5d6fd612fcf5c75ac77869b2a'),
+(3504, '/app-logic/system-apps/network/network.php', 'palacegate', '69.179.88.59', 0, '', '2014-02-26 22:42:56', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle131@palacegate', 'a963de8bd5aa85c719c961bd22fa3c99', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2014-02-26 16:42:56', '2014-02-26 16:42:56', '291da60e470e75b3c88a25fc14f61dee', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, 'd5b49ec26a572674d4f22cd33e002601'),
+(3505, '/stools/addmap.php', 'stools', '69.179.88.59', 0, '', '2014-02-26 22:43:18', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle131@root', 'a963de8bd5aa85c719c961bd22fa3c99', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2014-02-26 16:43:18', '2014-02-26 16:43:18', '3637dcde3aaa0f3af7020b08024d294d', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/root/stools/addmap.php', NULL, 'd5b49ec26a572674d4f22cd33e002601'),
+(3506, '/app-logic/system-apps/network/network.php', 'palacegate', '174.124.58.3', 0, '', '2014-03-11 01:18:45', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle153@palacegate', '2097a156e918db68086778c571d1abeb', '', 'Mozilla/5.0 (Linux; U; Android 2.3.4; en-us; ', 0, '2014-03-10 20:18:45', '2014-03-10 20:18:45', 'b682fe2308db501a2a3ad39ab2518a24', '2014-03-12 00:58:59', '2014-03-12 00:58:59', 1, 0, 'Mozilla/5.0 (Linux; U; Android 2.3.4; en-us; DROID', '', '', '174.124.23.160', '/switch/palacegate', NULL, 'a5358deaf38200a8c9fca4f0195e006e'),
+(3507, '/stools/addmap.php', 'stools', '174.124.58.3', 0, '', '2014-03-11 01:23:01', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle153@root', '2097a156e918db68086778c571d1abeb', '', 'Mozilla/5.0 (Linux; U; Android 2.3.4; en-us; ', 0, '2014-03-10 20:23:01', '2014-03-10 20:23:01', '32f9abe750df1997e4bca322826ebce3', '2014-03-12 00:58:36', '2014-03-12 00:58:36', 1, 0, 'Mozilla/5.0 (Linux; U; Android 2.3.4; en-us; DROID', '', '', '174.124.23.160', '/switch/root/stools/addmap.php', NULL, 'a5358deaf38200a8c9fca4f0195e006e'),
+(3508, '/app-logic/system-apps/network/network.php', 'palacegate', '174.124.45.90', 0, '', '2014-03-15 02:59:52', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle154@palacegate', '7329ba35af1973c961942dcfdb3bd5a4', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-03-14 21:59:52', '2014-03-14 21:59:52', '872a32cc791df55f4ae930e9fe746f98', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, 'f57e9aecbd70112112fd2e1186ca37b3'),
+(3509, '/stools/addmap.php', 'stools', '174.124.45.90', 0, '', '2014-03-15 03:00:22', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle154@root', '7329ba35af1973c961942dcfdb3bd5a4', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-03-14 22:00:22', '2014-03-14 22:00:22', '232f4e1546732e0b544fb356914d0a74', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/root/stools/addmap.php', NULL, 'f57e9aecbd70112112fd2e1186ca37b3'),
+(3510, '/app-logic/system-apps/network/network.php', 'palacegate', '174.124.45.33', 0, '', '2014-03-17 01:13:44', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle155@palacegate', '0c0adb1ab848f46e600c9db1f6f77bf3', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-03-16 20:13:44', '2014-03-16 20:13:44', 'a4c40621dbca14650bcc9e15608d0f6d', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '21da1628073b2fae200b485dfcfc42cf'),
+(3511, '/stools/subscribe.php', 'stools', '174.124.45.33', 0, '', '2014-03-17 01:14:17', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle155@root', '0c0adb1ab848f46e600c9db1f6f77bf3', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-03-16 20:14:17', '2014-03-16 20:14:17', 'dda4b15a96ace5a106132b3abbbeb682', '2014-03-17 04:08:03', '2014-03-17 04:08:03', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '174.124.45.33', '/switch/root/stools/addmap.php', NULL, '21da1628073b2fae200b485dfcfc42cf'),
+(3512, '/stools/addmap.php', 'stools', '174.124.44.254', 0, '', '2014-03-22 04:52:07', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle156@root', '61bc499f58649ca8ca3ea6295106ee39', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2014-03-21 23:52:07', '2014-03-21 23:52:07', '47d39fa94cd857e1e6ab09554e39d347', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/root/stools/addmap.php', NULL, '196a61b22db5d7fefacc1437274acece'),
+(3513, '/stools/addmap.php', 'stools', '174.124.41.37', 0, '', '2014-06-01 00:36:10', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle157@root', 'b97df9dfd1b6ede620426d11ec3944db', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-05-31 19:36:10', '2014-05-31 19:36:10', '2a1f5636c4d17a55373a834616206e3b', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/root/stools/addmap.php', NULL, '7d1c8f4c4c31eebcf00e97090625cc81'),
+(3514, '/stools/addmap.php', 'stools', '174.124.41.37', 0, '', '2014-06-09 04:08:35', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle158@root', 'b123ec05b3bf3909871721ebb9d975d0', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-06-08 23:08:35', '2014-06-08 23:08:35', '22c6ce60bdd0d186445cf16ec31b0c42', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/root/stools/addmap.php', NULL, 'bda3f8c79a13bfc28ebf591515bbc179'),
+(3515, '/app-logic/system-apps/network/network.php', 'palacegate', '174.124.41.37', 0, '', '2014-06-09 04:08:41', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle158@palacegate', 'b123ec05b3bf3909871721ebb9d975d0', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-06-08 23:08:41', '2014-06-08 23:08:41', '0ef5d390db9b859915544bc9c0b67294', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, 'bda3f8c79a13bfc28ebf591515bbc179'),
+(3516, '/stools/addmap.php', 'stools', '75.72.82.44', 0, '', '2014-06-18 04:21:25', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle159@root', '993de26670df3630434e6c10aef7fd75', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-06-17 23:21:25', '2014-06-17 23:21:25', 'edbc975a4d519e76ac84f57c3638d0f4', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/root/stools/addmap.php', NULL, 'b62c86aaaa3cd1542f46c4a668478757'),
+(3517, '/app-logic/system-apps/network/network.php', 'palacegate', '75.72.82.44', 0, '', '2014-06-18 04:21:36', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle159@palacegate', '993de26670df3630434e6c10aef7fd75', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-06-17 23:21:36', '2014-06-17 23:21:36', '246f154091619c653639807f12a92b19', '2014-06-18 04:25:47', '2014-06-18 04:25:47', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '75.72.82.44', '/switch/palacegate', NULL, 'b62c86aaaa3cd1542f46c4a668478757'),
+(3518, '/stools/addmap.php', 'stools', '174.124.50.58', 0, '', '2014-06-26 19:22:15', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle160@root', 'd0ab34a88f68b5f35051dff15e34a2d9', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-06-26 14:22:15', '2014-06-26 14:22:15', '53be5a14ed4808d86ae48d2631b8c533', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/root/stools/addmap.php', NULL, '6cad17b191b15c9548aca0b7259cc3f6'),
+(3519, '/app-logic/system-apps/network/network.php', 'palacegate', '174.124.50.58', 0, '', '2014-06-26 19:25:12', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle160@palacegate', 'd0ab34a88f68b5f35051dff15e34a2d9', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-06-26 14:25:12', '2014-06-26 14:25:12', '5a4f4b4b207b06defcbbeca7adae3b55', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '6cad17b191b15c9548aca0b7259cc3f6'),
+(3520, '/app-logic/system-apps/network/network.php', 'palacegate', '174.124.50.58', 0, '', '2014-06-26 19:33:51', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle161@palacegate', '98979c05094e15effeb9a88efd3e5651', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-06-26 14:33:51', '2014-06-26 14:33:51', '38491354328f55a95795736a586f89c8', '2014-06-26 19:36:16', '2014-06-26 19:36:16', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '174.124.50.58', '/switch/palacegate', NULL, 'ab712f5d2acd85f5c32bf27bb826a1fb'),
+(3521, '/app-logic/system-apps/network/network.php', 'palacegate', '174.124.50.58', 0, '', '2014-06-26 19:42:30', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle162@palacegate', '47ce72bee44a7480fadda7737435381c', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-06-26 14:42:30', '2014-06-26 14:42:30', '01e666c8f0250d8650ac42b84a1990fc', '2014-06-26 19:50:33', '2014-06-26 19:50:33', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '174.124.50.58', '/switch/palacegate', NULL, '2d69c71fc9940596e653a3baf5df2419'),
+(3522, '/stools/addmap.php', 'stools', '75.72.82.44', 0, '', '2014-09-04 03:00:57', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle163@root', '1d3dcfa5c040b71c2cc5c55b0eefa510', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-09-03 22:00:57', '2014-09-03 22:00:57', '69b40d1ea97f6b20910ffeb4e4ab2100', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/root/stools/addmap.php', NULL, '1bffe9a2a8f6c933f9065c23923f8da5'),
+(3523, '/app-logic/system-apps/network/network.php', 'palacegate', '75.72.82.44', 0, '', '2014-09-04 03:01:06', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle163@palacegate', '1d3dcfa5c040b71c2cc5c55b0eefa510', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-09-03 22:01:06', '2014-09-03 22:01:06', '833ac4b78b4878ba0f0f1e247ed01b3e', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '1bffe9a2a8f6c933f9065c23923f8da5'),
+(3524, '/app-logic/system-apps/network/network.php', 'palacegate', '207.67.100.134', 0, '', '2014-12-17 15:26:31', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle164@palacegate', 'd436ff70526bb3eec7f907520f0cd237', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-17 09:26:31', '2014-12-17 09:26:31', '5c99b697208f9d2dea12ee40de6fe10c', '2014-12-18 15:21:55', '2014-12-18 15:21:55', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '207.67.100.134', '/switch/palacegate', NULL, '75975186f28693797eebd7a18f1af287'),
+(3525, '/stools/addname.php', 'stools', '207.67.100.134', 0, '', '2014-12-17 15:40:58', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle164@root', 'd436ff70526bb3eec7f907520f0cd237', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-17 09:40:58', '2014-12-17 09:40:58', 'f8d8188e4c187a7c86becf6f05566a09', '2014-12-17 20:44:56', '2014-12-17 20:44:56', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '207.67.100.134', '/switch/root/stools/addmap.php', NULL, '75975186f28693797eebd7a18f1af287'),
+(3526, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.171.237', 0, '', '2014-12-18 07:11:30', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle165@palacegate', '9a11dabab565537a64d10772773f6da6', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 01:11:30', '2014-12-18 01:11:30', '97ea140cd3af35276b28109a7e12818e', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, 'ddc678f384d0e6755708f0e3d6e63ad1'),
+(3527, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 15:26:43', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 09:26:43', '0000-00-00 00:00:00', 'b96f28e1db8894b78136df2480b6a60b', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3528, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 15:27:20', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 09:27:20', '0000-00-00 00:00:00', '21553a7fb809fc5ed161b903d79c260d', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3529, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 15:29:57', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 09:29:57', '0000-00-00 00:00:00', 'eadc1c190ded6eac5a47d694314165ef', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3530, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 15:30:57', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 09:30:57', '0000-00-00 00:00:00', 'b9cbac2ee114075756ba08a7fce1fda9', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3531, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 15:31:27', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 09:31:27', '0000-00-00 00:00:00', 'd78aea906ae26a6d587f7d27b16c5411', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3532, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 15:32:59', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 09:32:59', '0000-00-00 00:00:00', '614ed46b8b0995bc8533d8c514250895', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3533, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 15:35:35', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 09:35:35', '0000-00-00 00:00:00', '19d2db8537951a32f30a889dee6ce39c', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3534, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 16:04:05', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 10:04:05', '0000-00-00 00:00:00', 'c8dac86468a92a57db982904c67de4cd', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3535, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 16:04:31', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 10:04:31', '0000-00-00 00:00:00', '27968cb6b5de974eed64d164b395aeca', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3536, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 16:05:54', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 10:05:54', '0000-00-00 00:00:00', 'b2fcfc3866a072fae63748ba9c1a9eee', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3537, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 16:06:47', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 10:06:47', '0000-00-00 00:00:00', '4b7f05f4bdffaa4fd6a5e894a61cc7d7', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3538, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 16:08:43', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 10:08:43', '0000-00-00 00:00:00', '58fe84f6b6e5424a19de05739f19c633', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3539, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 16:09:25', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 10:09:25', '0000-00-00 00:00:00', '92b093a284cb807c6aa390d05af54159', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3540, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 16:09:48', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 10:09:48', '0000-00-00 00:00:00', 'b85a340119bd0cad073213960892d680', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3541, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 16:11:09', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 10:11:09', '0000-00-00 00:00:00', '59b16af236443fcabf0baf408b549806', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3542, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 16:12:00', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 10:12:00', '0000-00-00 00:00:00', '70ac29b6f44e95f5069b24a6d77297df', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3543, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 16:14:55', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 10:14:55', '0000-00-00 00:00:00', '14068a26a00a5ea31aabbbee82de0cad', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3544, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 16:16:31', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 10:16:31', '0000-00-00 00:00:00', '6760e4b9e93b0b30300d2568bf83ae36', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3545, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 16:23:33', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 10:23:33', '0000-00-00 00:00:00', '82940b3dcc41c953da100f62a5a842d0', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3546, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 16:24:54', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 10:24:54', '0000-00-00 00:00:00', 'fc4f3c17c9503507c88add3020600ac0', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3547, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 16:24:57', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 10:24:57', '0000-00-00 00:00:00', '438e1ced2babeb044e56a47b6201bb20', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3548, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 16:25:45', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 10:25:45', '0000-00-00 00:00:00', '36fc2dd150b381028ce6c57547f57de1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3549, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 16:26:12', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 10:26:12', '0000-00-00 00:00:00', '3a26d01d21b503062b6daf93504346f5', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3550, NULL, 'palacegate', '207.67.100.134', 0, '', '2014-12-18 16:27:03', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 10:27:03', '0000-00-00 00:00:00', '8d55ef0beea4257effebc5f5f5711e61', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, NULL),
+(3551, '/app-logic/system-apps/network/network.php', 'palacegate', '207.67.100.134', 0, '', '2014-12-18 16:29:28', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', '83d22d53d41ae0af3bd0ce058e629b2d', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 10:29:28', '2014-12-18 10:29:28', 'bba3c5fb26056c75b3e8873b7a6cad1f', '2014-12-18 17:45:16', '2014-12-18 17:45:16', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '207.67.100.134', '/switch/palacegate', NULL, '46ea94b253374ff01b4abdb40c5fb7fd'),
+(3552, '/app-logic/system-apps/application/application.php', 'applications', '207.67.100.134', 0, '', '2014-12-18 17:22:40', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle166@palacegate', '83d22d53d41ae0af3bd0ce058e629b2d', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-18 11:22:40', '2014-12-18 11:22:40', 'ca43e58b33460f09c4974146c2c62e71', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/applications', NULL, '46ea94b253374ff01b4abdb40c5fb7fd'),
+(3553, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.171.237', 0, '', '2014-12-19 07:15:50', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle167@palacegate', 'd7180cb1e7443706034b954e6245a151', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-19 01:15:50', '2014-12-19 01:15:50', '55f511848f6f67df9db400cab411f62d', '2014-12-20 03:25:35', '0000-00-00 00:00:00', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '66.253.171.237', '/switch/palacegate', NULL, 'e7130c18128755d04fd2cea10ef1a3d4'),
+(3554, '/app-logic/system-apps/network/network.php', 'palacegate', '207.67.100.134', 0, '', '2014-12-19 18:07:06', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle168@palacegate', '6b1b7e3729244eef46a15f6088c7944d', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-19 12:07:06', '2014-12-19 12:07:06', '53e35a2b84eb64328c0d8f29ac164dc9', '2014-12-19 18:13:41', '2014-12-19 18:13:41', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '207.67.100.134', '/switch/palacegate', NULL, 'b52408be3b3986ffc451556340254b80'),
+(3555, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.171.237', 0, '', '2014-12-20 03:26:02', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle167@palacegate', 'd7180cb1e7443706034b954e6245a151', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-19 21:26:02', '2014-12-19 21:26:02', '9380642b3e8765ac714c7d833d39fbed', '2014-12-20 03:26:40', '0000-00-00 00:00:00', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '66.253.171.237', '/switch/palacegate', NULL, 'e7130c18128755d04fd2cea10ef1a3d4'),
+(3556, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.171.237', 0, '', '2014-12-20 03:27:54', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle167@palacegate', 'd7180cb1e7443706034b954e6245a151', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-19 21:27:54', '2014-12-19 21:27:54', '8fe05ae2bd316276811196b3e74816c9', '2014-12-20 03:38:31', '2014-12-20 03:38:31', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '66.253.171.237', '/switch/palacegate', NULL, 'e7130c18128755d04fd2cea10ef1a3d4'),
+(3557, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.171.237', 0, '', '2014-12-23 00:39:23', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle169@palacegate', '9a941df37d6d8895a405ed38d91e223d', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-22 18:39:23', '2014-12-22 18:39:23', '8bd6051ebaa936069f5b594448789a96', '2014-12-23 04:59:39', '2014-12-23 04:59:39', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate', '66.253.171.237', '/switch/palacegate', NULL, '9fb8caf6f6e4fe149d69051d31a7c8c3'),
+(3558, '/app-logic/system-apps/application/application.php', 'applications', '66.253.171.237', 0, '', '2014-12-23 04:59:42', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle169@palacegate', '9a941df37d6d8895a405ed38d91e223d', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-22 22:59:42', '2014-12-22 22:59:42', 'a7a7a8a7b05f74e383e2dca3207c0d11', '2014-12-23 05:00:32', '2014-12-23 05:00:32', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate', '66.253.171.237', '/switch/palacegate/applications', NULL, '9fb8caf6f6e4fe149d69051d31a7c8c3'),
+(3559, '/stools/subscribe.php', 'stools', '66.253.171.237', 0, '', '2014-12-23 05:01:12', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle169@root', '9a941df37d6d8895a405ed38d91e223d', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-22 23:01:12', '2014-12-22 23:01:12', 'ae00b46b4c424f399bd52fd5ed93a8a0', '2014-12-23 05:07:12', '2014-12-23 05:07:12', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '66.253.171.237', '/switch/root/stools/addmap.php', NULL, '9fb8caf6f6e4fe149d69051d31a7c8c3'),
+(3560, '/stools/addmap.php', 'stools', '66.253.171.237', 0, '', '2014-12-24 07:14:51', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle170@root', '35b35e2aaa9aa6484014ad33bb253353', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-24 01:14:51', '2014-12-24 01:14:51', '88742c0466e051efce5d4fbd2fffbd07', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/root/stools/addmap.php', NULL, '09c30382e205d474a9b3db4c0e9e234b'),
+(3561, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.171.237', 0, '', '2014-12-24 18:49:34', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle171@palacegate', '9b9c6ce65d58945084dcb70a360bed93', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-24 12:49:34', '2014-12-24 12:49:34', 'ca2eba903b1e8cd4c78a5dacca59ad1d', '2014-12-25 03:58:10', '2014-12-25 03:58:10', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '66.253.171.237', '/switch/palacegate', NULL, 'f6bfb5ad15b6b641e9d7cdfa46535d60'),
+(3562, '/stools/addmap.php', 'stools', '66.102.6.246', 0, '', '2014-12-24 21:20:36', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle172@root', 'b88d832ef2469bc40413faae94ccf590', 'http://www.google.com/search', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2014-12-24 15:20:36', '2014-12-24 15:20:36', '85d5b88b9676c60e27d2daaf7da08733', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/root/stools/addmap.php', NULL, '1e01ebf7528faecd7717765d48fc50f0'),
+(3563, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.171.237', 0, '', '2014-12-25 04:17:51', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle174@palacegate', '12a69c90ad8925915d78e62b5d87ae8f', '', 'Mozilla/5.0 (compatible; Konqueror/4.4; Linux', 0, '2014-12-24 22:17:51', '2014-12-24 22:17:51', '2b6452f94bab461d3208687290805b79', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, 'edbf433d388caa7f2489cc93180688d0'),
+(3564, '/stools/addmap.php', 'stools', '66.253.171.237', 0, '', '2014-12-25 04:18:39', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle174@root', '12a69c90ad8925915d78e62b5d87ae8f', '', 'Mozilla/5.0 (compatible; Konqueror/4.4; Linux', 0, '2014-12-24 22:18:39', '2014-12-24 22:18:39', '743fec8e27df432ccfe5efad1fb4bd05', '2014-12-25 04:18:56', '2014-12-25 04:18:56', 1, 0, 'Mozilla/5.0 (compatible; Konqueror/4.4; Linux) KHT', '', '', '66.253.171.237', '/switch/root/stools/addname.php', NULL, 'edbf433d388caa7f2489cc93180688d0'),
+(3565, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.171.237', 0, '', '2014-12-25 04:25:58', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle170@palacegate', '35b35e2aaa9aa6484014ad33bb253353', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2014-12-24 22:25:58', '2014-12-24 22:25:58', '183f62d11ee41d650090381f1a101867', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '09c30382e205d474a9b3db4c0e9e234b'),
+(3566, '/app-logic/system-apps/network/network.php', 'palacegate', '66.102.6.246', 0, '', '2014-12-25 04:48:25', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle176@palacegate', '11f775e481437c51d3f033b19014d4e8', 'http://www.google.com/search', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2014-12-24 22:48:25', '2014-12-24 22:48:25', '56fcca75d0b44fcea747ec76c49fc874', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '36d3ef62fdac4b480ee67d34c4a65413'),
+(3567, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.171.237', 0, '', '2015-01-03 02:11:10', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle187@palacegate', 'ebcc4cc8178d545865b6cb468fd2d419', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-01-02 20:11:10', '2015-01-02 20:11:10', '42ceee722aa0e8002fe18bf5b4097e20', '2015-01-03 02:11:31', '2015-01-03 02:11:31', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '66.253.171.237', '/switch/palacegate', NULL, '6cab9b7aecefc47f4d54169849fe7670'),
+(3568, '/app-logic/system-apps/network/network.php', 'palacegate', '207.67.100.134', 0, '', '2015-01-06 22:02:23', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle190@palacegate', 'cc76cd6a776f3b35092aa7c07d262bcc', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-01-06 16:02:23', '2015-01-06 16:02:23', '2422e75a7d7809a27eaa7b62a1a93ed9', '2015-01-06 23:20:05', '2015-01-06 23:20:05', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '207.67.100.134', '/switch/palacegate', NULL, '4e6f6e8cebeceab03225d1a9986126e0'),
+(3569, '/app-logic/system-apps/application/application.php', 'applications', '207.67.100.134', 0, '', '2015-01-06 23:20:09', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle190@palacegate', 'cc76cd6a776f3b35092aa7c07d262bcc', 'https://gnic.io/switch/palacegate?', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-01-06 17:20:09', '2015-01-06 17:20:09', '3deea8e4fbea42b653f04e9b32650764', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/applications', NULL, '4e6f6e8cebeceab03225d1a9986126e0'),
+(3570, '/stools/addmap.php', 'stools', '207.67.100.134', 0, '', '2015-01-06 23:20:19', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle190@root', 'cc76cd6a776f3b35092aa7c07d262bcc', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-01-06 17:20:19', '2015-01-06 17:20:19', '59b6a57dd2291198074c02405fa677d3', '2015-01-06 23:23:25', '2015-01-06 23:23:25', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/root/stools/addmap.php', '207.67.100.134', '/switch/root/stools/addmap.php', NULL, '4e6f6e8cebeceab03225d1a9986126e0'),
+(3571, '/stools/addmap.php', 'stools', '207.67.100.134', 0, '', '2015-01-06 23:21:58', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle191@root', 'ebb0688b5047c6d01d317f9263e781fd', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-01-06 17:21:58', '2015-01-06 17:21:58', 'ae75bcc84f4a58c0e02149dcdb5c1dcd', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/root/stools/addmap.php', NULL, '220041879d5968b6a34c49a6733155bf'),
+(3572, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.171.237', 0, '', '2015-01-07 02:28:26', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle193@palacegate', 'a9d12482978da08459f3e0b569bf1dc6', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-01-06 20:28:26', '2015-01-06 20:28:26', '34f654703e1157299e6ac58cefce68b5', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '65b309302d832e77bada2910f4133a90'),
+(3573, '/stools/addmap.php', 'stools', '66.253.171.237', 0, '', '2015-01-07 02:28:57', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle193@root', 'a9d12482978da08459f3e0b569bf1dc6', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-01-06 20:28:57', '2015-01-06 20:28:57', '16744c3183465d4c5bdd66652ffb81ad', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/root/stools/addmap.php', NULL, '65b309302d832e77bada2910f4133a90'),
+(3574, '/stools/addmap.php', 'stools', '66.253.171.237', 0, '', '2015-01-11 14:22:46', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle194@root', '9ddf25dcf1d8e341f969a29ccb8d1173', '', 'Mozilla/5.0 (compatible; Konqueror/4.4; Linux', 0, '2015-01-11 08:22:46', '2015-01-11 08:22:46', '68023bfeff41c4868ca0ff294cce97fa', '2015-01-11 14:35:00', '2015-01-11 14:35:00', 1, 0, 'Mozilla/5.0 (compatible; Konqueror/4.4; Linux) KHT', '', '', '66.253.171.237', '/switch/root/stools/addmap.php', NULL, '65a2edcd780c72ac563955d08d8d118c'),
+(3575, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.171.237', 0, '', '2015-01-13 01:27:43', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle195@palacegate', '752ad8350ac7a7f2a60da98619f93ce6', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-01-12 19:27:43', '2015-01-12 19:27:43', '145ed33100c5d5081a6dafbe982b2cfa', '2015-01-13 01:29:01', '2015-01-13 01:29:01', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '66.253.171.237', '/switch/palacegate', NULL, '6a8a01591384defb8ee5b05d47be8140'),
+(3576, '/app-logic/system-apps/application/application.php', 'applications', '66.253.171.237', 0, '', '2015-01-13 01:28:00', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle195@palacegate', '752ad8350ac7a7f2a60da98619f93ce6', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-01-12 19:28:00', '2015-01-12 19:28:00', '7b7de28c925d610bce0cd9145f2a92f0', '2015-01-13 01:28:13', '2015-01-13 01:28:13', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate', '66.253.171.237', '/switch/palacegate/applications', NULL, '6a8a01591384defb8ee5b05d47be8140'),
+(3577, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.171.237', 0, '', '2015-01-17 08:37:58', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle196@palacegate', '74cbe1caf72de0f63a5ae7a2be6948b5', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-01-17 02:37:58', '2015-01-17 02:37:58', '531a2bee5ee1838058ec445b994ba72e', '2015-01-17 08:38:51', '2015-01-17 08:38:51', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate', '66.253.171.237', '/switch/palacegate', NULL, '02dbbba32703e0de2951537943742e74'),
+(3578, '/app-logic/system-apps/application/application.php', 'applications', '66.253.171.237', 0, '', '2015-01-17 08:38:19', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle196@palacegate', '74cbe1caf72de0f63a5ae7a2be6948b5', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-01-17 02:38:19', '2015-01-17 02:38:19', '1a137d77982d96646129120860300558', '2015-01-17 08:38:42', '2015-01-17 08:38:42', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate', '66.253.171.237', '/switch/palacegate/applications', NULL, '02dbbba32703e0de2951537943742e74'),
+(3579, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.169.240', 0, '', '2015-01-20 20:08:36', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle197@palacegate', '9ebf89e27d2f42391d1bc409034c2011', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2015-01-20 14:08:36', '2015-01-20 14:08:36', 'a5c8c7d24ca6920d66fa9fa97130c818', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, 'b7683e4c61cfcad2560f98903d393586'),
+(3580, '/app-logic/system-apps/network/network.php', 'palacegate', '75.234.115.62', 0, '', '2015-01-22 22:12:05', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle198@palacegate', 'f96dc7565bec0afed17d9043e8765d54', '', 'Mozilla/5.0 (Linux; U; Android 4.4.2; en-us; ', 0, '2015-01-22 16:12:05', '2015-01-22 16:12:05', 'f9c2e67f77480bd584611b3e0b3965c9', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '0ed146dc4d666b3710e033e89bc4b4e7'),
+(3581, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.170.180', 0, '', '2015-01-24 03:54:26', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle199@palacegate', '7e655d89bf9ec028e0d57e3024247df3', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-01-23 21:54:26', '2015-01-23 21:54:26', 'c76e2eae1da64b0a85af0c3b05fa99a4', '2015-01-24 03:54:32', '2015-01-24 03:54:32', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '66.253.170.180', '/switch/palacegate', NULL, '40b01502f2340f74f06257578e78e6c9'),
+(3582, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.170.194', 0, '', '2015-02-03 16:31:15', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle200@palacegate', '3849273687fd84525a9bdcb0039a3e90', '', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2015-02-03 10:31:15', '2015-02-03 10:31:15', '065416855e94516f9afcab34914ee5fc', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, 'de4df7dfadb965672ba17840bddf42fa'),
+(3583, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.168.42', 0, '', '2015-02-08 06:20:39', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle201@palacegate', 'ca8ea4b941b95f99be35c5cfb258cf88', '', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2015-02-08 00:20:39', '2015-02-08 00:20:39', '931ed215b13512b456caaa09fb3cf9d0', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, 'a0a10b23019fff94a714d001d59cabe6'),
+(3584, '/app-logic/system-apps/network/network.php', 'palacegate', '184.100.112.230', 0, '', '2015-03-08 04:42:54', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle202@palacegate', '1b17693659ab5c5a47d1fed6aeb61b71', '', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:36.0) ', 0, '2015-03-07 22:42:54', '2015-03-07 22:42:54', '3136a236fe25b77b4d207c0818f537a2', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '6622a8ab5081613cdf49b5a84219a15e'),
+(3585, '/app-logic/system-apps/application/application.php', 'applications', '184.100.112.230', 0, '', '2015-03-08 04:43:00', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle202@palacegate', '1b17693659ab5c5a47d1fed6aeb61b71', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:36.0) ', 0, '2015-03-07 22:43:00', '2015-03-07 22:43:00', 'f3a24f900d346ade8b9136e97f9eda95', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/applications', NULL, '6622a8ab5081613cdf49b5a84219a15e'),
+(3586, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.171.91', 0, '', '2015-03-16 23:20:16', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle203@palacegate', 'ae354f196db65c4e004918c88cb3fc9a', '', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2015-03-16 18:20:16', '2015-03-16 18:20:16', '48193c07e8a358a6460b42e17c09cd6d', '2015-03-16 23:20:55', '2015-03-16 23:20:55', 1, 0, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36', '', 'https://gnic.io/switch/palacegate', '66.253.171.91', '/switch/palacegate', NULL, 'ae3f8c1e07749847bb6879b6ac0a76fb'),
+(3587, '/app-logic/system-apps/application/application.php', 'applications', '66.253.171.91', 0, '', '2015-03-16 23:20:39', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle203@palacegate', 'ae354f196db65c4e004918c88cb3fc9a', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2015-03-16 18:20:39', '2015-03-16 18:20:39', 'dfb4446a3e6e07e24bb3e74ebf0314ce', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/applications', NULL, 'ae3f8c1e07749847bb6879b6ac0a76fb'),
+(3588, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.169.213', 0, '', '2015-04-01 02:11:27', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle204@palacegate', '512732de291b4b0d9cdaf0acf3503f64', '', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2015-03-31 21:11:27', '2015-03-31 21:11:27', 'd7285c93f9be35eb40c0a5d5566fbd2d', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, 'd81c891e0e0a6fa651f0c3efee83b859'),
+(3589, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.169.213', 0, '', '2015-04-04 03:31:08', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle205@palacegate', 'a68303bb5f144dae06055d47f5e4509e', '', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2015-04-03 22:31:08', '2015-04-03 22:31:08', '6459289f0bdd9831c7c32e5f737e6359', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '7f0a77cde886a2f083a8d2c9d465e8cd'),
+(3590, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.170.143', 0, '', '2015-05-27 02:24:17', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle206@palacegate', '237ef0af0a841113bd22a8b98038f5be', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2015-05-26 21:24:17', '2015-05-26 21:24:17', '7b542e7b87e1743fe613d41b22410003', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '74d4a5567e42130de0dce25272912171'),
+(3591, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.170.143', 0, '', '2015-05-31 06:34:00', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle207@palacegate', 'ba2ef7355eb2ec6502c35ff6cf830575', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2015-05-31 01:34:00', '2015-05-31 01:34:00', '514034638476cccfd43548ec0b58a8e5', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '6e568d8845ad2dcaf7b69ec5f4955668'),
+(3592, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.170.143', 0, '', '2015-05-31 23:47:13', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle208@palacegate', '0bee913650bbe96c3ebfda8356a03aa5', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2015-05-31 18:47:13', '2015-05-31 18:47:13', '5f87ec02e2f38844e11f15a4feac6434', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '29820bb04daaac67973f749a8a8ccb8b'),
+(3593, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.168.57', 0, '', '2015-06-17 04:23:20', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle209@palacegate', '584c347e73ead61c13f1731773788887', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2015-06-16 23:23:20', '2015-06-16 23:23:20', 'fc048caeb0d5be4fccb8c93e53fcf3f5', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, 'c4a339eb58378eab727d025023d4c525');
+INSERT INTO `running` (`pk_id`, `resource`, `provider`, `client_ip`, `uses_channel`, `query`, `client_live_last`, `client_live_auth`, `client_live_auth_time`, `client_live_min_interval`, `client`, `session_handle`, `referer`, `agent`, `has_errors`, `start_bench`, `finish_bench`, `stateless_id`, `update_bench_start`, `update_bench_finish`, `is_broken`, `client_live_broken_ack`, `update_agent`, `client_live_last_agent`, `update_referer`, `last_ip`, `URI_CALLED`, `expiration_time`, `client_key`) VALUES
+(3594, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.170.140', 0, '', '2015-07-14 03:06:47', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle210@palacegate', '36e001f8bcbae981b8a9fa2398739070', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2015-07-13 22:06:47', '2015-07-13 22:06:47', 'bd4377ba2eae9b8a253928ecfcb3d90b', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '740e813d4d36d13fbad709ed4fb3db9f'),
+(3595, '/app-logic/system-apps/network/network.php', 'palacegate', '66.253.171.203', 0, '', '2015-08-01 04:29:20', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle211@palacegate', '2e5590038d184fc7c557c36dd23e22bc', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2015-07-31 23:29:20', '2015-07-31 23:29:20', '35de109a052cad6c098f4f3d51702d06', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '426b51184edb224e5fdeef7897f1b846'),
+(3596, '/app-logic/system-apps/network/network.php', 'palacegate', '66.87.144.244', 0, '', '2015-08-06 09:26:34', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle212@palacegate', '55fca414ed524c20d79aa38eb3036969', '', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2015-08-06 04:26:34', '2015-08-06 04:26:34', '07c2f49f8b8186e0a2ad6c1e50496b55', '2015-08-06 23:14:36', '2015-08-06 23:14:36', 1, 0, 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Build/KVT', '', '', '66.87.144.11', '/switch/palacegate', NULL, '958ac4102b09b5f46f16c59540964e43'),
+(3597, '/app-logic/system-apps/network/network.php', 'palacegate', '173.202.205.122', 0, '', '2015-08-20 03:25:52', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle213@palacegate', 'd0641d73e03b180cf8f7d931428090e3', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2015-08-19 22:25:52', '2015-08-19 22:25:52', '98c608e030efaa53840bb60b39aec159', '2015-08-20 03:27:34', '2015-08-20 03:27:34', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; r', '', 'https://gnic.io/switch/palacegate', '173.202.205.122', '/switch/palacegate', NULL, 'ddedc0a1b411c0ab1af06a656720293f'),
+(3598, '/app-logic/system-apps/application/application.php', 'applications', '173.202.205.122', 0, '', '2015-08-20 03:26:58', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle213@palacegate', 'd0641d73e03b180cf8f7d931428090e3', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2015-08-19 22:26:58', '2015-08-19 22:26:58', 'b8da6324ab8e91f966d6a529c0d43417', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/applications', NULL, 'ddedc0a1b411c0ab1af06a656720293f'),
+(3599, '/app-logic/system-apps/network/network.php', 'palacegate', '98.125.58.3', 0, '', '2015-09-12 22:56:44', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle214@palacegate', '703ca906ae54dc774480cce0dca77a40', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-12 17:56:44', '2015-09-12 17:56:44', '74895e2bc65e95db506e73df9f4c0d32', '2015-09-13 01:32:53', '2015-09-13 01:32:53', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '98.125.58.3', '/switch/palacegate', NULL, '760084301b9bd7496a8ade2739827141'),
+(3600, '/app-logic/system-apps/application/application.php', 'applications', '98.125.58.3', 0, '', '2015-09-13 00:59:42', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle214@palacegate', '703ca906ae54dc774480cce0dca77a40', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-12 19:59:42', '2015-09-12 19:59:42', 'fa8205ce332681db80f6e3bb0a7b55f3', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/applications', NULL, '760084301b9bd7496a8ade2739827141'),
+(3601, '/app-logic/system-apps/network/network.php', 'palacegate', '173.202.219.19', 0, '', '2015-09-22 01:28:42', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@palacegate', '2086f05755e14dd1bacc644dda981686', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 20:28:42', '2015-09-21 20:28:42', 'b87e1e995e180abba033dcdc269931e7', '2015-09-22 04:04:03', '2015-09-22 04:04:03', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '173.202.219.19', '/switch/palacegate', NULL, 'cb7ae9f6b3cca15db2ffabaff3f6a431'),
+(3602, '/app-logic/system-apps/application/application.php', 'applications', '173.202.219.19', 0, '', '2015-09-22 01:28:46', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@palacegate', '2086f05755e14dd1bacc644dda981686', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 20:28:46', '2015-09-21 20:28:46', 'cba3abc45c921dae89dbbcde377d690e', '2015-09-22 03:59:22', '2015-09-22 03:59:22', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate/', '173.202.219.19', '/switch/palacegate/applications', NULL, 'cb7ae9f6b3cca15db2ffabaff3f6a431'),
+(3603, '/stools/addmap.php', 'organizations', '173.202.219.19', 0, '', '2015-09-22 01:54:43', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@organizations', '2086f05755e14dd1bacc644dda981686', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 20:54:43', '2015-09-21 20:54:43', '9cd835fcc1a2150acf039fbc327a01db', '2015-09-22 01:57:09', '2015-09-22 01:57:09', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '173.202.219.19', '/switch/organizations', NULL, 'cb7ae9f6b3cca15db2ffabaff3f6a431'),
+(3604, '/stools/subscribe.php', 'stools', '173.202.219.19', 0, '', '2015-09-22 01:58:05', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@root', '2086f05755e14dd1bacc644dda981686', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 20:58:05', '2015-09-21 20:58:05', 'dad51f1d6caab8a8b23805e2a064b6e4', '2015-09-22 02:26:24', '2015-09-22 02:26:24', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/root/stools/subscribe.php', '173.202.219.19', '/switch/root/stools/addmap.php', NULL, 'cb7ae9f6b3cca15db2ffabaff3f6a431'),
+(3605, '/stools/addname.php', 'stools', '173.202.219.19', 0, '', '2015-09-22 02:26:46', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@palacegate', '2086f05755e14dd1bacc644dda981686', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 21:26:46', '2015-09-21 21:26:46', '9198dc3106d132016141cc63d5edd869', '2015-09-22 02:29:36', '2015-09-22 02:28:54', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '173.202.219.19', '/switch/palacegate/stools/addmap.php', NULL, 'cb7ae9f6b3cca15db2ffabaff3f6a431'),
+(3606, NULL, 'stools', '173.202.219.19', 0, '', '2015-09-22 02:29:42', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 21:29:42', '0000-00-00 00:00:00', '8917a72f7b577f2343acde7fdc9a5e28', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/stools/addname.php', NULL, NULL),
+(3607, NULL, 'stools', '173.202.219.19', 0, '', '2015-09-22 02:29:49', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 21:29:49', '0000-00-00 00:00:00', '4195dfde3ce1281e1e0d2c0e59152d74', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/stools/addname.php', NULL, NULL),
+(3608, '/stools/addmap.php', 'stools', '173.202.219.19', 0, '', '2015-09-22 02:30:17', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@palacegate', '2086f05755e14dd1bacc644dda981686', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 21:30:17', '2015-09-21 21:30:17', 'af986b27d96e4b4aba5dfeedf8e5d8e1', '2015-09-22 02:31:07', '0000-00-00 00:00:00', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '173.202.219.19', '/switch/palacegate/stools/addmap.php', NULL, 'cb7ae9f6b3cca15db2ffabaff3f6a431'),
+(3609, '/stools/addnameOld.php', 'stools', '173.202.219.19', 0, '', '2015-09-22 02:32:00', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@palacegate', '2086f05755e14dd1bacc644dda981686', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 21:32:00', '2015-09-21 21:32:00', 'adcbf243659362dbd2ee2b3a6bd30e6c', '2015-09-22 02:35:43', '2015-09-22 02:35:12', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '173.202.219.19', '/switch/palacegate/stools/addname.php', NULL, 'cb7ae9f6b3cca15db2ffabaff3f6a431'),
+(3610, NULL, 'stools', '173.202.219.19', 0, '', '2015-09-22 02:35:49', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 21:35:49', '0000-00-00 00:00:00', '1a9fa329e596f47bdd49255a4c95063c', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/stools/addname.php', NULL, NULL),
+(3611, NULL, 'stools', '173.202.219.19', 0, '', '2015-09-22 02:35:52', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 21:35:52', '0000-00-00 00:00:00', '723182966d2cbc596a594d474900a907', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/stools/addname.php', NULL, NULL),
+(3612, NULL, 'stools', '173.202.219.19', 0, '', '2015-09-22 02:36:54', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 21:36:54', '0000-00-00 00:00:00', 'd367e2107955b8abf6cae45436b48d5a', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/stools/addname.php', NULL, NULL),
+(3613, NULL, 'stools', '173.202.219.19', 0, '', '2015-09-22 02:37:42', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 21:37:42', '0000-00-00 00:00:00', '279c723f93cc36a6470d11d2ffb6b487', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/stools/addname.php', NULL, NULL),
+(3614, '/app-logic/system-apps/network/network.php', 'stools', '173.202.219.19', 0, '', '2015-09-22 02:38:08', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@palacegate', '2086f05755e14dd1bacc644dda981686', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 21:38:08', '2015-09-21 21:38:08', '2365a2051a06321efa31aaaea70f6060', '2015-09-22 03:27:53', '2015-09-22 02:59:41', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '173.202.219.19', '/switch/palacegate/stools/addname.php', NULL, 'cb7ae9f6b3cca15db2ffabaff3f6a431'),
+(3615, NULL, 'stools', '173.202.219.19', 0, '', '2015-09-22 03:27:58', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 22:27:58', '0000-00-00 00:00:00', '94924bdbf46ee00e94c503a76cbb3fa4', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/stools/', NULL, NULL),
+(3616, NULL, 'stools', '173.202.219.19', 0, '', '2015-09-22 03:28:49', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 22:28:49', '0000-00-00 00:00:00', 'b51d2a29634e07dfdb4a64a28291029d', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/stools/', NULL, NULL),
+(3617, NULL, 'stools', '173.202.219.19', 0, '', '2015-09-22 03:28:55', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 22:28:55', '0000-00-00 00:00:00', '7d4270d2d97181adf4173ca915e6896c', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/stools/', NULL, NULL),
+(3618, NULL, 'stools', '173.202.219.19', 0, '', '2015-09-22 03:29:47', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 22:29:47', '0000-00-00 00:00:00', '2aa8fae6426d37131620a020c7874d48', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/stools/', NULL, NULL),
+(3619, '/app-logic/system-apps/network/listlocalroutes.php', 'stools', '173.202.219.19', 0, '', '2015-09-22 03:30:50', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@palacegate', '2086f05755e14dd1bacc644dda981686', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 22:30:50', '2015-09-21 22:30:50', '57b9e2de5b76aa8b0e2b1fc92a194b3a', '2015-09-22 04:00:08', '2015-09-22 04:00:08', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate/', '173.202.219.19', '/switch/palacegate/stools/', NULL, 'cb7ae9f6b3cca15db2ffabaff3f6a431'),
+(3620, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '173.202.219.19', 0, '', '2015-09-22 04:02:32', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle215@palacegate', '2086f05755e14dd1bacc644dda981686', 'https://gnic.io/switch/palacegate/', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-21 23:02:32', '2015-09-21 23:02:32', '56c0596917885eb172bbb172bf224659', '2015-09-22 04:03:46', '2015-09-22 04:03:46', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate/', '173.202.219.19', '/switch/palacegate/tools', NULL, 'cb7ae9f6b3cca15db2ffabaff3f6a431'),
+(3621, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '173.202.219.19', 0, '', '2015-09-24 10:36:51', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle216@palacegate', 'f4a0e124892eeea09addc7e82aa2d044', 'https://gnic.io/switch/palacegate/', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-24 05:36:51', '2015-09-24 05:36:51', '096840703c2ec54a48652be4e80b857f', '2015-09-25 03:49:15', '2015-09-25 03:49:15', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate/tools', '173.202.219.19', '/switch/palacegate/tools', NULL, '10415c3d3b38f8cc17da7e45a6f1ec36'),
+(3622, '/app-logic/system-apps/network/network.php', 'palacegate', '173.202.219.19', 0, '', '2015-09-24 10:37:04', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle216@palacegate', 'f4a0e124892eeea09addc7e82aa2d044', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-24 05:37:04', '2015-09-24 05:37:04', '5ff2cadae207248b2b48d3742a04f6af', '2015-09-25 03:03:56', '2015-09-25 03:03:56', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '173.202.219.19', '/switch/palacegate/', NULL, '10415c3d3b38f8cc17da7e45a6f1ec36'),
+(3623, '/app-logic/system-apps/network/network.php', 'palacegate', '173.202.219.19', 0, '', '2015-09-27 01:34:48', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle217@palacegate', 'f4f7b40eb94ecb7c35f0cc1c38036bc3', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-26 20:34:48', '2015-09-26 20:34:48', 'b54c72dd196f18ac649eb611490f27de', '2015-09-27 02:17:56', '2015-09-27 02:17:19', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '173.202.219.19', '/switch/palacegate/', NULL, '84a7531c99e075b91a53fb00b32201e7'),
+(3624, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '173.202.219.19', 0, '', '2015-09-27 01:35:19', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle217@palacegate', 'f4f7b40eb94ecb7c35f0cc1c38036bc3', 'https://gnic.io/switch/palacegate/', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-26 20:35:19', '2015-09-26 20:35:19', 'c3c1f4f814ebe7a16607fde4db0227f1', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/tools', NULL, '84a7531c99e075b91a53fb00b32201e7'),
+(3625, NULL, 'palacegate', '173.202.219.19', 0, '', '2015-09-27 02:19:15', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle217@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-26 21:19:15', '0000-00-00 00:00:00', 'afffb64d8627a63f786f8400495fe5d8', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/', NULL, NULL),
+(3626, '/app-logic/system-apps/network/network.php', 'palacegate', '173.202.219.19', 0, '', '2015-09-27 02:21:04', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle217@palacegate', 'f4f7b40eb94ecb7c35f0cc1c38036bc3', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-26 21:21:04', '2015-09-26 21:21:04', 'a4f96ef890380d831df258aebb01f776', '2015-09-27 02:36:30', '2015-09-27 02:36:30', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '173.202.219.19', '/switch/palacegate/', NULL, '84a7531c99e075b91a53fb00b32201e7'),
+(3627, '/app-logic/system-apps/network/network.php', 'palacegate', '173.202.219.19', 0, '', '2015-09-28 01:57:15', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle218@palacegate', '8c9f3c173f6e3a08c6b578e46f511d86', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-27 20:57:15', '2015-09-27 20:57:15', '384e66d9af28cd1e0321fbde434e2907', '2015-09-28 04:04:43', '2015-09-28 04:04:43', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '173.202.219.19', '/switch/palacegate/', NULL, '00ba6615ea0f6fa25fe5bd6e6b65d916'),
+(3628, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '173.202.219.19', 0, '', '2015-09-28 02:58:40', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle218@palacegate', '8c9f3c173f6e3a08c6b578e46f511d86', 'https://gnic.io/switch/palacegate/', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-27 21:58:40', '2015-09-27 21:58:40', '40a8d06a84b570a9668bcc2c97312832', '2015-09-28 03:18:43', '2015-09-28 03:18:43', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate/', '173.202.219.19', '/switch/palacegate/tools', NULL, '00ba6615ea0f6fa25fe5bd6e6b65d916'),
+(3629, '/app-logic/system-apps/network/listlocalroutes.php', 'crumb', '173.202.219.19', 0, '', '2015-09-28 03:04:58', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle218@palacegate', '8c9f3c173f6e3a08c6b578e46f511d86', 'https://gnic.io/switch/palacegate/', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-27 22:04:58', '2015-09-27 22:04:58', '56512a70467750dbe4c5f91929d0451b', '2015-09-28 04:06:25', '2015-09-28 04:06:25', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate/', '173.202.219.19', '/switch/palacegate/crumb', NULL, '00ba6615ea0f6fa25fe5bd6e6b65d916'),
+(3630, NULL, 'applications', '173.202.219.19', 0, '', '2015-09-28 04:04:31', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle218@palacegate', NULL, 'https://gnic.io/switch/palacegate/', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-27 23:04:31', '0000-00-00 00:00:00', '546a08103f52b4ee9012f48542b8efd5', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/applications', NULL, NULL),
+(3631, '/stools/imgloader.php', 'crumb', '173.202.219.19', 0, '', '2015-09-29 02:49:20', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle219@palacegate', 'f5324e21d6d955ddaf1c1779ae6f7ad4', 'https://gnic.io/switch/palacegate/', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-28 21:49:20', '2015-09-28 21:49:20', '849110d5a7a2068fc11422f2e3388fba', '2015-09-29 03:35:01', '2015-09-29 03:34:00', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '173.202.219.19', '/switch/palacegate/crumb', NULL, 'fe78d83e53833ba2f3aca50620bbb696'),
+(3632, '/app-logic/system-apps/network/network.php', 'palacegate', '173.202.219.19', 0, '', '2015-09-29 03:03:43', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle219@palacegate', 'f5324e21d6d955ddaf1c1779ae6f7ad4', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-28 22:03:43', '2015-09-28 22:03:43', '0b4ad595ac287905364c412ea91592c5', '2015-09-29 03:06:24', '2015-09-29 03:06:24', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '173.202.219.19', '/switch/palacegate/', NULL, 'fe78d83e53833ba2f3aca50620bbb696'),
+(3633, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '173.202.219.19', 0, '', '2015-09-29 03:04:38', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle219@palacegate', 'f5324e21d6d955ddaf1c1779ae6f7ad4', 'https://gnic.io/switch/palacegate/', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-28 22:04:38', '2015-09-28 22:04:38', 'f2b054cf45f64d5b96abd407839c50d5', '2015-09-29 03:06:23', '2015-09-29 03:06:23', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate/', '173.202.219.19', '/switch/palacegate/tools', NULL, 'fe78d83e53833ba2f3aca50620bbb696'),
+(3634, NULL, 'crumb', '173.202.219.19', 0, '', '2015-09-29 03:35:44', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle219@palacegate', NULL, '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-28 22:35:44', '0000-00-00 00:00:00', '59cc2f739a0203c6e8e31e7476d09afc', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/crumb/imgloader.php', NULL, NULL),
+(3635, '/stools/imgloader.php', 'crumb', '173.202.219.19', 0, '', '2015-09-29 03:35:58', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle219@palacegate', 'f5324e21d6d955ddaf1c1779ae6f7ad4', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-28 22:35:58', '2015-09-28 22:35:58', '235378ceedf58f444e4533ffcb0b2fdf', '2015-09-29 03:54:25', '2015-09-29 03:53:55', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate/crumb', '173.202.219.19', '/switch/palacegate/crumb/imgloader.php', NULL, 'fe78d83e53833ba2f3aca50620bbb696'),
+(3636, '/stools/imgloader.php', 'crumb', '173.202.219.19', 0, '', '2015-09-29 03:55:56', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle219@palacegate', 'f5324e21d6d955ddaf1c1779ae6f7ad4', 'https://gnic.io/switch/palacegate/crumb', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-28 22:55:56', '2015-09-28 22:55:56', '2a3be8ab0ea17bb3f5085f06c848e7b0', '2015-09-29 03:57:27', '2015-09-29 03:56:42', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate/crumb', '173.202.219.19', '/switch/palacegate/crumb/imgloader.php', NULL, 'fe78d83e53833ba2f3aca50620bbb696'),
+(3637, NULL, 'crumb', '173.202.219.19', 0, '', '2015-09-29 03:57:48', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle219@palacegate', NULL, 'https://gnic.io/switch/palacegate/crumb', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-28 22:57:48', '0000-00-00 00:00:00', '965f9d58b4fee85b3eab7d7bee46f000', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/crumb/imgloader.php', NULL, NULL),
+(3638, '/stools/imgloader.php', 'crumb', '173.202.219.19', 0, '', '2015-09-29 03:58:22', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle219@palacegate', 'f5324e21d6d955ddaf1c1779ae6f7ad4', 'https://gnic.io/switch/palacegate/crumb', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-09-28 22:58:22', '2015-09-28 22:58:22', 'be019aa6868f024a426739ba0b4a7304', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/crumb/imgloader.php', NULL, 'fe78d83e53833ba2f3aca50620bbb696'),
+(3639, '/app-logic/system-apps/network/network.php', 'palacegate', '71.10.72.122', 0, '', '2015-10-03 23:09:56', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle220@palacegate', '5a8582a563639da6153c0b65a57a4125', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-10-03 18:09:56', '2015-10-03 18:09:56', '1f9a5a37063b29b01c3bacab36e18348', '2015-10-04 00:39:12', '2015-10-04 00:39:12', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '71.10.72.122', '/switch/palacegate/', NULL, 'a00587e74d9bec96ff3e0479407e259f'),
+(3640, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '71.10.72.122', 0, '', '2015-10-03 23:10:02', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle220@palacegate', '5a8582a563639da6153c0b65a57a4125', 'https://gnic.io/switch/palacegate/', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-10-03 18:10:02', '2015-10-03 18:10:02', '04eabc0ce55e0ad24e6032bc3939d173', '2015-10-04 00:39:03', '2015-10-04 00:39:03', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate/', '71.10.72.122', '/switch/palacegate/tools', NULL, 'a00587e74d9bec96ff3e0479407e259f'),
+(3641, '/stools/imgloader.php', 'crumb', '71.10.72.122', 0, '', '2015-10-03 23:42:08', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle220@palacegate', '5a8582a563639da6153c0b65a57a4125', 'https://gnic.io/switch/palacegate/', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-10-03 18:42:08', '2015-10-03 18:42:08', '6ad0ab6109c72d6eeb73a3824bddc2f4', '2015-10-04 01:04:57', '2015-10-04 01:04:57', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://mail.google.com/mail/u/0/?zx=73g7ia48mw62', '71.10.72.122', '/switch/palacegate/crumb', NULL, 'a00587e74d9bec96ff3e0479407e259f'),
+(3642, '/app-logic/system-apps/network/network.php', 'palacegate', '71.10.72.122', 0, '', '2015-10-04 00:30:38', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle221@palacegate', '982a57672029147546376692cc4869f9', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2015-10-03 19:30:38', '2015-10-03 19:30:38', '23e7bd86201dba7818391eb650c24f07', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/', NULL, '33ec0ccb31944996b19cc699052f8774'),
+(3643, '/stools/imgloader.php', 'crumb', '71.10.72.122', 0, '', '2015-10-04 00:30:38', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle221@palacegate', '982a57672029147546376692cc4869f9', 'https://gnic.io/switch/palacegate/', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2015-10-03 19:30:38', '2015-10-03 19:30:38', '6ed72c8bcb03e690c3bff233c7b47d34', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/crumb/imgloader.php', NULL, '33ec0ccb31944996b19cc699052f8774'),
+(3644, '/app-logic/system-apps/network/network.php', 'palacegate', '173.202.219.19', 0, '', '2015-10-10 23:31:34', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle222@palacegate', '19a8560656a29dea31d14d043cb795c4', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-10-10 18:31:34', '2015-10-10 18:31:34', '6c681a0760f7ec0104dda819b06c5d2c', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/', NULL, 'b558b49ccfafb54efdefe843520f21b6'),
+(3645, '/stools/imgloader.php', 'crumb', '173.202.219.19', 0, '', '2015-10-10 23:31:36', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle222@palacegate', '19a8560656a29dea31d14d043cb795c4', 'https://gnic.io/switch/palacegate/', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-10-10 18:31:36', '2015-10-10 18:31:36', '26ce53a1ca65baba834037bd6b1f44aa', '2015-10-10 23:32:51', '2015-10-10 23:32:51', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate/tools', '173.202.219.19', '/switch/palacegate/crumb/imgloader.php', NULL, 'b558b49ccfafb54efdefe843520f21b6'),
+(3646, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '173.202.219.19', 0, '', '2015-10-10 23:32:51', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle222@palacegate', '19a8560656a29dea31d14d043cb795c4', 'https://gnic.io/switch/palacegate/', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-10-10 18:32:51', '2015-10-10 18:32:51', 'b40bfe9cf97b2cd90537bbdb235c7e66', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/tools', NULL, 'b558b49ccfafb54efdefe843520f21b6'),
+(3647, '/stools/imgloader.php', 'crumb', '66.220.145.243', 0, '', '2015-10-10 23:36:48', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle224@palacegate', '37deee2784b1a851f6eb4ae96f52aae9', 'http://l.facebook.com/lsr.php?u=https%3A%2F%2Fgnic.io%2Fswitch%2Fpalacegate%2Fcrumb%2Fimgloader.php&ext=1444520505&hash=', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2015-10-10 18:36:48', '2015-10-10 18:36:48', '73c65ece91478cddc1601b45d64ea04f', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/crumb/imgloader.php', NULL, '3cf56bcdcf287f4b496a4f1d46e71131'),
+(3648, '/app-logic/system-apps/network/network.php', 'palacegate', '72.160.182.216', 0, '', '2015-10-29 03:38:59', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle225@palacegate', '1253ae0af1d31747852c4d0bd3096a90', '', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2015-10-28 22:38:59', '2015-10-28 22:38:59', '53da05f4f1e93364531871c518c83154', '2015-10-29 03:42:31', '2015-10-29 03:42:31', 1, 0, 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Build/KVT', '', '', '72.160.182.216', '/switch/palacegate', NULL, 'a67087ff11e65dbde68669d107477c88'),
+(3649, '/stools/imgloader.php', 'crumb', '72.160.182.216', 0, '', '2015-10-29 03:38:59', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle225@palacegate', '1253ae0af1d31747852c4d0bd3096a90', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2015-10-28 22:38:59', '2015-10-28 22:38:59', '88846e0fcad44fc395222abb7e51f75c', '2015-10-29 03:43:23', '2015-10-29 03:43:23', 1, 0, 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Build/KVT', '', 'https://gnic.io/switch/palacegate/tools/addmap.php', '72.160.182.216', '/switch/palacegate/crumb/imgloader.php', NULL, 'a67087ff11e65dbde68669d107477c88'),
+(3650, '/stools/addmap.php', 'tools', '72.160.182.216', 0, '', '2015-10-29 03:42:34', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle225@palacegate', '1253ae0af1d31747852c4d0bd3096a90', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2015-10-28 22:42:34', '2015-10-28 22:42:34', '788f67c4a567c86846f80e6afe9fdce4', '2015-10-29 03:43:22', '2015-10-29 03:43:22', 1, 0, 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Build/KVT', '', 'https://gnic.io/switch/palacegate/tools', '72.160.182.216', '/switch/palacegate/tools', NULL, 'a67087ff11e65dbde68669d107477c88'),
+(3651, '/app-logic/system-apps/network/network.php', 'palacegate', '66.87.144.216', 0, '', '2015-10-30 20:02:18', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle226@palacegate', '1d3a044a629a570e023706b167a24e5c', '', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2015-10-30 15:02:18', '2015-10-30 15:02:18', '323855b95ac3d6497b4cd88259b679cd', '2015-10-30 20:08:25', '2015-10-30 20:08:25', 1, 0, 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Build/KVT', '', 'https://gnic.io/switch/palacegate', '66.87.144.216', '/switch/palacegate', NULL, '1af28bdf7c09315a5916eccf10b4fee3'),
+(3652, '/stools/imgloader.php', 'crumb', '66.87.144.216', 0, '', '2015-10-30 20:02:19', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle226@palacegate', '1d3a044a629a570e023706b167a24e5c', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2015-10-30 15:02:19', '2015-10-30 15:02:19', 'afa96a8da5cc073e07004984c783d84d', '2015-10-30 20:05:14', '2015-10-30 20:05:14', 1, 0, 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Build/KVT', '', 'https://gnic.io/switch/palacegate/tools', '66.87.144.216', '/switch/palacegate/crumb/imgloader.php', NULL, '1af28bdf7c09315a5916eccf10b4fee3'),
+(3653, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '66.87.144.216', 0, '', '2015-10-30 20:02:28', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle226@palacegate', '1d3a044a629a570e023706b167a24e5c', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2015-10-30 15:02:28', '2015-10-30 15:02:28', 'f9537ccc19e8cc793e2daed66831e142', '2015-10-30 20:05:14', '2015-10-30 20:05:14', 1, 0, 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Build/KVT', '', 'https://gnic.io/switch/palacegate', '66.87.144.216', '/switch/palacegate/tools', NULL, '1af28bdf7c09315a5916eccf10b4fee3'),
+(3654, NULL, 'applications', '66.87.144.216', 0, '', '2015-10-30 20:04:15', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle226@palacegate', NULL, 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2015-10-30 15:04:15', '0000-00-00 00:00:00', 'f6cc3c94a913b8541fe0c1238b089979', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/applications', NULL, NULL),
+(3655, NULL, 'applications', '66.87.144.216', 0, '', '2015-10-30 20:04:18', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle226@palacegate', NULL, '', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2015-10-30 15:04:18', '0000-00-00 00:00:00', 'b8d8d177e32d02dd23e43bef7a1ffd15', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/applications', NULL, NULL),
+(3656, NULL, 'applications', '66.87.144.216', 0, '', '2015-10-30 20:04:20', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle226@palacegate', NULL, '', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2015-10-30 15:04:20', '0000-00-00 00:00:00', '778f4e0aa222545f2943eea55c80a257', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/applications', NULL, NULL),
+(3657, '/app-logic/system-apps/network/network.php', 'palacegate', '173.202.205.237', 0, '', '2015-11-05 22:00:04', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle227@palacegate', '9f62da56f8f8dcb1a9fa9ef31cb31a03', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2015-11-05 16:00:04', '2015-11-05 16:00:04', 'fd2a651f8073f7fc2db73654f2426497', '2015-11-05 22:00:24', '2015-11-05 22:00:24', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; r', '', 'https://gnic.io/switch/palacegate', '173.202.205.237', '/switch/palacegate', NULL, '774776329b2ed1d8a551fd17401b4aac'),
+(3658, '/stools/imgloader.php', 'crumb', '173.202.205.237', 0, '', '2015-11-05 22:00:04', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle227@palacegate', '9f62da56f8f8dcb1a9fa9ef31cb31a03', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2015-11-05 16:00:04', '2015-11-05 16:00:04', '9e773c7d58677851673e962e063ed18a', '2015-11-05 22:02:21', '2015-11-05 22:02:21', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; r', '', 'https://gnic.io/switch/palacegate/tools/addmap.php', '173.202.205.237', '/switch/palacegate/crumb/imgloader.php', NULL, '774776329b2ed1d8a551fd17401b4aac'),
+(3659, '/stools/addmap.php', 'tools', '173.202.205.237', 0, '', '2015-11-05 22:00:29', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle227@palacegate', '9f62da56f8f8dcb1a9fa9ef31cb31a03', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2015-11-05 16:00:29', '2015-11-05 16:00:29', '663daf1ee6174aeeb21a4bbb66ae4344', '2015-11-05 22:02:21', '2015-11-05 22:02:21', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; r', '', 'https://gnic.io/switch/palacegate/tools/', '173.202.205.237', '/switch/palacegate/tools', NULL, '774776329b2ed1d8a551fd17401b4aac'),
+(3660, '/app-logic/system-apps/network/network.php', 'palacegate', '173.202.205.237', 0, '', '2015-11-05 23:06:08', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle228@palacegate', '94996948f0d9872cce12e0a2bfccffc5', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-11-05 17:06:08', '2015-11-05 17:06:08', '3cc23c919397b9f29aca1628c3ef3145', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, 'b303325db3828c423d9fd82c94ea0a28'),
+(3661, '/stools/imgloader.php', 'crumb', '173.202.205.237', 0, '', '2015-11-05 23:06:08', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle228@palacegate', '94996948f0d9872cce12e0a2bfccffc5', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-11-05 17:06:08', '2015-11-05 17:06:08', '9a0b8b12a800199c72c35c3c6294d77d', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/crumb/imgloader.php', NULL, 'b303325db3828c423d9fd82c94ea0a28'),
+(3662, '/app-logic/system-apps/network/network.php', 'palacegate', '72.160.198.66', 0, '', '2015-11-09 16:26:40', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle229@palacegate', '842146abf36e683fc9d2194a3faacb54', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-11-09 10:26:40', '2015-11-09 10:26:40', '111769ca669e49dde083b2b037408648', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '5a08611bd618b9a8108f9d357d15768a'),
+(3663, '/stools/imgloader.php', 'crumb', '72.160.198.66', 0, '', '2015-11-09 16:26:40', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle229@palacegate', '842146abf36e683fc9d2194a3faacb54', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-11-09 10:26:40', '2015-11-09 10:26:40', '9cd8442ad4e2e6655fa36c0d3e914377', '2015-11-09 16:47:08', '2015-11-09 16:47:08', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate/tools/subscribe.php', '72.160.198.66', '/switch/palacegate/crumb/imgloader.php', NULL, '5a08611bd618b9a8108f9d357d15768a'),
+(3664, '/stools/subscribe.php', 'tools', '72.160.198.66', 0, '', '2015-11-09 16:26:44', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle229@palacegate', '842146abf36e683fc9d2194a3faacb54', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-11-09 10:26:44', '2015-11-09 10:26:44', '9c4e6b07c5cf159428f69c2ce9d51e98', '2015-11-09 16:47:08', '2015-11-09 16:47:08', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate/tools/', '72.160.198.66', '/switch/palacegate/tools', NULL, '5a08611bd618b9a8108f9d357d15768a'),
+(3665, '/stools/addname.php', 'tools', '69.179.88.59', 0, '', '2015-11-11 20:55:59', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle230@palacegate', '238659f5cd3a5d211a502afceca708aa', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-11-11 14:55:59', '2015-11-11 14:55:59', '01ee1f9f91890aea2a137f97197f4e70', '2015-11-11 21:08:39', '2015-11-11 21:08:39', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '69.179.88.59', '/switch/palacegate/tools/', NULL, '788b0a39a056c64bdb06b7c730b810d3'),
+(3666, '/stools/imgloader.php', 'crumb', '69.179.88.59', 0, '', '2015-11-11 20:55:59', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle230@palacegate', '238659f5cd3a5d211a502afceca708aa', 'https://gnic.io/switch/palacegate/tools/', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-11-11 14:55:59', '2015-11-11 14:55:59', '748699fb82882305d06a51f797dd2915', '2015-11-11 21:08:48', '2015-11-11 21:08:48', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate/tools/addname.php', '69.179.88.59', '/switch/palacegate/crumb/imgloader.php', NULL, '788b0a39a056c64bdb06b7c730b810d3'),
+(3667, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '71.10.72.122', 0, '', '2015-11-19 20:43:34', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle231@palacegate', 'aba709c92fe02884cfe9b2f987fc8cac', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-11-19 14:43:34', '2015-11-19 14:43:34', 'a7666ff696ff644e027e105328c3ec0a', '2015-11-19 23:38:41', '2015-11-19 23:38:41', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', '', '98.125.124.109', '/switch/palacegate/tools/', NULL, '604a886c428bd50cb059de5622e6b560'),
+(3668, '/stools/imgloader.php', 'crumb', '71.10.72.122', 0, '', '2015-11-19 20:43:34', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle231@palacegate', 'aba709c92fe02884cfe9b2f987fc8cac', 'https://gnic.io/switch/palacegate/tools/', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-11-19 14:43:34', '2015-11-19 14:43:34', 'c51987c2d9ed02b226d0773c969700f9', '2015-11-19 23:38:39', '2015-11-19 23:38:39', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate/tools/', '98.125.124.109', '/switch/palacegate/crumb/imgloader.php', NULL, '604a886c428bd50cb059de5622e6b560'),
+(3669, '/app-logic/system-apps/network/network.php', 'palacegate', '71.10.72.122', 0, '', '2015-11-19 20:44:47', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle231@palacegate', 'aba709c92fe02884cfe9b2f987fc8cac', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-11-19 14:44:47', '2015-11-19 14:44:47', '90dd40a86a3f048fa951fd592d68dd9e', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/', NULL, '604a886c428bd50cb059de5622e6b560'),
+(3670, '/app-logic/system-apps/network/network.php', 'palacegate', '207.118.184.148', 0, '', '2015-11-23 03:53:49', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle232@palacegate', 'cb8d1f60e957712b534d19cef6f74531', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2015-11-22 21:53:49', '2015-11-22 21:53:49', '0a69b701aac2f7bb6bfb5b4e2f82a5be', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '253f68c56ac108d060991d8fea6dca8a'),
+(3671, '/stools/imgloader.php', 'crumb', '207.118.184.148', 0, '', '2015-11-23 03:53:49', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle232@palacegate', 'cb8d1f60e957712b534d19cef6f74531', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2015-11-22 21:53:49', '2015-11-22 21:53:49', '1c1d229a7336823a41f03530131cd1ad', '2015-11-23 03:53:56', '2015-11-23 03:53:56', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; r', '', 'https://gnic.io/switch/palacegate/tools', '207.118.184.148', '/switch/palacegate/crumb/imgloader.php', NULL, '253f68c56ac108d060991d8fea6dca8a'),
+(3672, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '207.118.184.148', 0, '', '2015-11-23 03:53:56', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle232@palacegate', 'cb8d1f60e957712b534d19cef6f74531', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7', 0, '2015-11-22 21:53:56', '2015-11-22 21:53:56', '87b561271d0048af21129301a3b2080a', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/tools', NULL, '253f68c56ac108d060991d8fea6dca8a'),
+(3673, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '174.124.139.165', 0, '', '2015-12-20 19:58:40', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle233@palacegate', '0aa4d75594381e16c58bf0441f39fffa', '', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-12-20 13:58:40', '2015-12-20 13:58:40', '8bf9b73355a0f02fbe3ec567463cb220', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/tools/', NULL, '2f6dfe1baa9a4b889e5522d9b5ef662a'),
+(3674, '/stools/imgloader.php', 'crumb', '174.124.139.165', 0, '', '2015-12-20 19:58:40', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle233@palacegate', '0aa4d75594381e16c58bf0441f39fffa', 'https://gnic.io/switch/palacegate/tools/', 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebK', 0, '2015-12-20 13:58:40', '2015-12-20 13:58:40', '38a28f1e3ac7f944f2d38bef18572393', '2015-12-20 19:58:40', '2015-12-20 19:58:40', 1, 0, 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate/tools/', '174.124.139.165', '/switch/palacegate/crumb/imgloader.php', NULL, '2f6dfe1baa9a4b889e5522d9b5ef662a'),
+(3675, '/app-logic/system-apps/network/network.php', 'palacegate', '208.87.237.201', 0, '', '2016-01-14 23:25:19', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle234@palacegate', '1a7c9d68bf7ca3bddd8fc4bba22aef18', '', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebK', 0, '2016-01-14 17:25:19', '2016-01-14 17:25:19', '013b6163598f6a268c1077745947e3a5', '2016-01-14 23:32:45', '2016-01-14 23:32:45', 1, 0, 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/53', '', '', '208.87.237.201', '/switch/palacegate', NULL, 'f55e497d91d0b7e1e0b9d6cb55bf9de6'),
+(3676, '/app-logic/system-apps/network/listlocalroutes.php', 'crumb', '208.87.237.201', 0, '', '2016-01-14 23:25:20', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle234@palacegate', '1a7c9d68bf7ca3bddd8fc4bba22aef18', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebK', 0, '2016-01-14 17:25:20', '2016-01-14 17:25:20', '7dcb619947bbddefd5291197fc0fcb08', '2016-01-14 23:29:25', '2016-01-14 23:29:25', 1, 0, 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate', '208.87.237.201', '/switch/palacegate/crumb/imgloader.php', NULL, 'f55e497d91d0b7e1e0b9d6cb55bf9de6'),
+(3677, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '208.87.237.201', 0, '', '2016-01-14 23:25:29', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle234@palacegate', '1a7c9d68bf7ca3bddd8fc4bba22aef18', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebK', 0, '2016-01-14 17:25:29', '2016-01-14 17:25:29', '168ed9c4b53498200f483fcf8df0ccb7', '2016-01-14 23:28:24', '2016-01-14 23:28:24', 1, 0, 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/53', '', 'https://gnic.io/switch/palacegate/tools/', '208.87.237.201', '/switch/palacegate/tools', NULL, 'f55e497d91d0b7e1e0b9d6cb55bf9de6'),
+(3678, NULL, 'applications', '208.87.237.201', 0, '', '2016-01-14 23:28:39', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle234@palacegate', NULL, 'https://gnic.io/switch/palacegate/', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebK', 0, '2016-01-14 17:28:39', '0000-00-00 00:00:00', '844c4cdd39c7034c6aa0db25ee5acf0a', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/applications', NULL, NULL),
+(3679, '/app-logic/system-apps/network/network.php', 'palacegate', '207.118.184.9', 0, '', '2016-01-15 06:10:20', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle235@palacegate', '96090bc998179aea4af6a86d06b50364', '', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2016-01-15 00:10:20', '2016-01-15 00:10:20', 'a481408610d577f47826fe8426bbcfcd', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, 'd92cdfe9e0dc145032b1a243c90809c4'),
+(3680, '/stools/imgloader.php', 'crumb', '207.118.184.9', 0, '', '2016-01-15 06:10:20', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle235@palacegate', '96090bc998179aea4af6a86d06b50364', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2016-01-15 00:10:20', '2016-01-15 00:10:20', 'a3809dd90e8f347b09031ed87a9c5734', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/crumb/imgloader.php', NULL, 'd92cdfe9e0dc145032b1a243c90809c4'),
+(3681, '/app-logic/system-apps/network/network.php', 'palacegate', '207.118.138.71', 0, '', '2016-01-22 03:47:11', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle236@palacegate', '4a857b5c0ac978cd3eb25036bd5cfedd', '', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2016-01-21 21:47:11', '2016-01-21 21:47:11', '048a3df7d78169832c86f6302c74af60', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, 'a4adb68ba02907b80ceca39794140e41'),
+(3682, '/stools/imgloader.php', 'crumb', '207.118.138.71', 0, '', '2016-01-22 03:47:11', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle236@palacegate', '4a857b5c0ac978cd3eb25036bd5cfedd', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2016-01-21 21:47:11', '2016-01-21 21:47:11', '9bc520c6948b91538d2ffb45b2552e74', '2016-01-22 03:49:00', '2016-01-22 03:49:00', 1, 0, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36', '', 'https://gnic.io/switch/palacegate/tools/addmap.php', '207.118.138.71', '/switch/palacegate/crumb/imgloader.php', NULL, 'a4adb68ba02907b80ceca39794140e41'),
+(3683, '/stools/addmap.php', 'tools', '207.118.138.71', 0, '', '2016-01-22 03:47:19', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle236@palacegate', '4a857b5c0ac978cd3eb25036bd5cfedd', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2016-01-21 21:47:19', '2016-01-21 21:47:19', '2e2db26fe9636f9c358fd70242718e51', '2016-01-22 03:48:57', '2016-01-22 03:48:57', 1, 0, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36', '', '', '207.118.138.71', '/switch/palacegate/tools', NULL, 'a4adb68ba02907b80ceca39794140e41'),
+(3684, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '47.49.8.86', 0, '', '2016-01-23 17:51:31', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle237@palacegate', '7ecebb3a34edcabe962fe3e7b92c9e50', '', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.', 0, '2016-01-23 11:51:31', '2016-01-23 11:51:31', '54f4b017eb5708177366444fd99ec4d0', '2016-01-23 17:52:00', '2016-01-23 17:52:00', 1, 0, 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (K', '', '', '47.49.8.86', '/switch/palacegate/tools/', NULL, '82bad9bd366f18eab970b095f8e0f8e5'),
+(3685, '/stools/imgloader.php', 'crumb', '47.49.8.86', 0, '', '2016-01-23 17:51:31', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle237@palacegate', '7ecebb3a34edcabe962fe3e7b92c9e50', 'https://gnic.io/switch/palacegate/tools/', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.', 0, '2016-01-23 11:51:31', '2016-01-23 11:51:31', '179c3baaa81257c9a6a35d20e06180cd', '2016-01-23 17:52:00', '2016-01-23 17:52:00', 1, 0, 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (K', '', 'https://gnic.io/switch/palacegate/tools/', '47.49.8.86', '/switch/palacegate/crumb/imgloader.php', NULL, '82bad9bd366f18eab970b095f8e0f8e5');
+INSERT INTO `running` (`pk_id`, `resource`, `provider`, `client_ip`, `uses_channel`, `query`, `client_live_last`, `client_live_auth`, `client_live_auth_time`, `client_live_min_interval`, `client`, `session_handle`, `referer`, `agent`, `has_errors`, `start_bench`, `finish_bench`, `stateless_id`, `update_bench_start`, `update_bench_finish`, `is_broken`, `client_live_broken_ack`, `update_agent`, `client_live_last_agent`, `update_referer`, `last_ip`, `URI_CALLED`, `expiration_time`, `client_key`) VALUES
+(3686, '/app-logic/system-apps/network/network.php', 'palacegate', '70.197.224.243', 0, '', '2016-02-14 01:34:44', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle238@palacegate', '76cb4aa5968b51089ad353fa18f48788', '', 'Mozilla/5.0 (Android 5.0.2; Tablet; rv:44.0) ', 0, '2016-02-13 19:34:44', '2016-02-13 19:34:44', '0279b00cf2868ad8a0c52cfe4646b821', '2016-02-14 01:40:11', '2016-02-14 01:40:11', 1, 0, 'Mozilla/5.0 (Android 5.0.2; Tablet; rv:44.0) Gecko', '', '', '70.197.224.243', '/switch/palacegate', NULL, '509ee3b942506e6cf99556a92fba22f4'),
+(3687, '/stools/imgloader.php', 'crumb', '70.197.224.243', 0, '', '2016-02-14 01:34:44', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle238@palacegate', '76cb4aa5968b51089ad353fa18f48788', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Android 5.0.2; Tablet; rv:44.0) ', 0, '2016-02-13 19:34:44', '2016-02-13 19:34:44', 'aac20c6ddb5c09bd9df170bcd6fd0746', '2016-02-14 01:40:11', '2016-02-14 01:40:11', 1, 0, 'Mozilla/5.0 (Android 5.0.2; Tablet; rv:44.0) Gecko', '', 'https://gnic.io/switch/palacegate', '70.197.224.243', '/switch/palacegate/crumb/imgloader.php', NULL, '509ee3b942506e6cf99556a92fba22f4'),
+(3688, '/stools/addname.php', 'tools', '70.197.224.243', 0, '', '2016-02-14 01:34:50', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle238@palacegate', '76cb4aa5968b51089ad353fa18f48788', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Android 5.0.2; Tablet; rv:44.0) ', 0, '2016-02-13 19:34:50', '2016-02-13 19:34:50', '45bafab3f311a58790a8225fd516a9d7', '2016-02-14 01:36:38', '2016-02-14 01:36:38', 1, 0, 'Mozilla/5.0 (Android 5.0.2; Tablet; rv:44.0) Gecko', '', 'https://gnic.io/switch/palacegate/tools/addname.php', '70.197.224.243', '/switch/palacegate/tools', NULL, '509ee3b942506e6cf99556a92fba22f4'),
+(3689, '/app-logic/system-apps/network/network.php', 'palacegate', '66.87.145.209', 0, '', '2016-02-14 04:12:23', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle239@palacegate', 'c0c130d5ff70573d65fe6092f433d1eb', '', 'Mozilla/5.0 (Linux; Android 5.0.2; VK410 Buil', 0, '2016-02-13 22:12:23', '2016-02-13 22:12:23', '4c022799ab4bb4d999ef3bc574e43afe', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, 'e544c49d5b1434c295fbdad56a8bc7c1'),
+(3690, '/stools/imgloader.php', 'crumb', '66.87.145.209', 0, '', '2016-02-14 04:12:23', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle239@palacegate', 'c0c130d5ff70573d65fe6092f433d1eb', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Linux; Android 5.0.2; VK410 Buil', 0, '2016-02-13 22:12:23', '2016-02-13 22:12:23', 'b6459254e68e513295d8c5e6443f3c8d', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/crumb/imgloader.php', NULL, 'e544c49d5b1434c295fbdad56a8bc7c1'),
+(3691, '/stools/imgloader.php', 'crumb', '70.197.195.33', 0, '', '2016-02-14 04:26:23', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle240@palacegate', 'a7d25f4ded65c4e2aedc57061c40502b', '', 'Mozilla/5.0 (Android 5.0.2; Tablet; rv:44.0) ', 0, '2016-02-13 22:26:23', '2016-02-13 22:26:23', '2b7565756c9fb0c760038e6ffe6832b7', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/crumb/imgloader.php', NULL, 'f78b2c969229038647f82d8a3ab395da'),
+(3692, '/app-logic/system-apps/network/network.php', 'palacegate', '70.197.195.33', 0, '', '2016-02-14 04:40:11', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle241@palacegate', 'f43046fc66d14af5d7eeeb918896c194', '', 'Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Geck', 0, '2016-02-13 22:40:11', '2016-02-13 22:40:11', '16177b79873d51c1f0c2026c774bc89a', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '39221b827faa40c6e7b88d3ff9c52230'),
+(3693, '/stools/imgloader.php', 'crumb', '70.197.195.33', 0, '', '2016-02-14 04:40:11', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle241@palacegate', 'f43046fc66d14af5d7eeeb918896c194', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Geck', 0, '2016-02-13 22:40:11', '2016-02-13 22:40:11', 'f7dca991a0d2ff3233d9f44a75b7304b', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/crumb/imgloader.php', NULL, '39221b827faa40c6e7b88d3ff9c52230'),
+(3694, '/stools/imgloader.php', 'crumb', '70.197.195.33', 0, '', '2016-02-14 04:40:32', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle242@palacegate', '28cc9b5d2e614cfc02ca8f074c17cc9c', '', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-02-13 22:40:32', '2016-02-13 22:40:32', '61011fcf9cad31fd82dfbc8b5eed3777', '2016-02-14 06:00:13', '2016-02-14 06:00:13', 1, 0, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36', '', '', '70.197.195.33', '/switch/palacegate/crumb/imgloader.php', NULL, 'ed0415b5b564c92858c16408af15f185'),
+(3695, '/stools/addmap.php', 'tools', '70.197.195.33', 0, '', '2016-02-14 05:15:26', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle242@palacegate', '28cc9b5d2e614cfc02ca8f074c17cc9c', '', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-02-13 23:15:26', '2016-02-13 23:15:26', 'e45a045ff2733b8c5ae360a40f5a5524', '2016-02-14 05:57:16', '2016-02-14 05:57:16', 1, 0, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36', '', '', '70.197.195.33', '/switch/palacegate/tools/', NULL, 'ed0415b5b564c92858c16408af15f185'),
+(3696, '/app-logic/system-apps/network/network.php', 'palacegate', '70.197.195.33', 0, '', '2016-02-14 05:16:32', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle242@palacegate', '28cc9b5d2e614cfc02ca8f074c17cc9c', '', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-02-13 23:16:32', '2016-02-13 23:16:32', 'fabceb4b97dab7e6577c554654bff4cc', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, 'ed0415b5b564c92858c16408af15f185'),
+(3697, '/app-logic/system-apps/network/network.php', 'palacegate', '70.197.228.173', 0, '', '2016-02-16 21:20:10', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle291@palacegate', '11250e1feb79b98c3836206475da9414', '', 'Mozilla/5.0 (Linux; Android 5.0.2; VK410 Buil', 0, '2016-02-16 15:20:10', '2016-02-16 15:20:10', '4dfed1f2d7a56cf7dc4930c5e242dd0f', '2016-02-16 21:20:27', '2016-02-16 21:20:27', 1, 0, 'Mozilla/5.0 (Linux; Android 5.0.2; VK410 Build/LRX', '', '', '70.197.228.173', '/switch/palacegate', NULL, '1ccef839925abfc9ffdbedcf1a9eb134'),
+(3698, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '70.197.228.173', 0, '', '2016-02-16 21:20:23', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle291@palacegate', '11250e1feb79b98c3836206475da9414', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Linux; Android 5.0.2; VK410 Buil', 0, '2016-02-16 15:20:23', '2016-02-16 15:20:23', '3c7b5f084ccde9f5e4df622acb34cffa', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/tools', NULL, '1ccef839925abfc9ffdbedcf1a9eb134'),
+(3699, '/app-logic/system-apps/network/network.php', 'palacegate', '66.87.145.60', 0, '', '2016-02-24 20:47:39', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle292@palacegate', '7e17f283a3795d4a09be5e1309592139', '', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2016-02-24 14:47:39', '2016-02-24 14:47:39', 'fb5a7082c4075dbb3d60aafea2d58ce0', '2016-02-24 20:53:26', '2016-02-24 20:53:26', 1, 0, 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Build/KVT', '', '', '66.87.145.60', '/switch/palacegate', NULL, '05d9b4712438302963e5a3477086a698'),
+(3700, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '66.87.145.60', 0, '', '2016-02-24 20:47:58', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle292@palacegate', '7e17f283a3795d4a09be5e1309592139', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2016-02-24 14:47:58', '2016-02-24 14:47:58', '06b47e08aed7e94dede169790b5b4130', '2016-02-24 20:50:29', '2016-02-24 20:50:29', 1, 0, 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Build/KVT', '', 'https://gnic.io/switch/palacegate/', '66.87.145.60', '/switch/palacegate/tools', NULL, '05d9b4712438302963e5a3477086a698'),
+(3701, NULL, 'applications', '66.87.145.60', 0, '', '2016-02-24 20:49:46', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle292@palacegate', NULL, 'https://gnic.io/switch/palacegate/', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2016-02-24 14:49:46', '0000-00-00 00:00:00', 'b41408a5c609948f4662d9cc058879ea', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/applications', NULL, NULL),
+(3702, '/app-logic/system-apps/network/listlocalroutes.php', 'crumb', '66.87.145.60', 0, '', '2016-02-24 20:49:54', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle292@palacegate', '7e17f283a3795d4a09be5e1309592139', 'https://gnic.io/switch/palacegate/', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2016-02-24 14:49:54', '2016-02-24 14:49:54', '82210d6212b65af2faa0913a83a28d12', '2016-02-24 20:50:23', '2016-02-24 20:50:23', 1, 0, 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Build/KVT', '', 'https://gnic.io/switch/palacegate/', '66.87.145.60', '/switch/palacegate/crumb', NULL, '05d9b4712438302963e5a3477086a698'),
+(3703, '/app-logic/system-apps/network/network.php', 'palacegate', '184.223.135.157', 0, '', '2016-03-02 22:02:49', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle293@palacegate', '0c034d6515462b9c02138ff6ad1503f9', '', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-03-02 16:02:49', '2016-03-02 16:02:49', '0dd978930413f9598a97c983f1aab711', '2016-03-02 22:12:17', '2016-03-02 22:12:17', 1, 0, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36', '', '', '184.223.135.157', '/switch/palacegate', NULL, '2aa5e652a1426a8ea129acab7d78a455'),
+(3704, '/app-logic/system-apps/network/network.php', 'palacegate', '184.223.28.142', 0, '', '2016-03-08 18:41:25', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle294@palacegate', 'a4e94eeea9cdef7f4a0797744ffcb5c7', '', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-03-08 12:41:25', '2016-03-08 12:41:25', '98ac24a1928f4ff671c461745bfced5e', '2016-03-08 18:43:03', '2016-03-08 18:43:03', 1, 0, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36', '', 'https://www.facebook.com/', '184.223.28.142', '/switch/palacegate', NULL, '04703189579aded82b94f676b075efe4'),
+(3705, NULL, 'applications', '184.223.28.142', 0, '', '2016-03-08 18:41:34', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle294@palacegate', NULL, 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-03-08 12:41:34', '0000-00-00 00:00:00', 'bbbc317428ce2ccc1633ee79ba306acb', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/applications', NULL, NULL),
+(3706, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '184.223.28.142', 0, '', '2016-03-08 18:41:42', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle294@palacegate', 'a4e94eeea9cdef7f4a0797744ffcb5c7', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-03-08 12:41:42', '2016-03-08 12:41:42', '5b260393611b18aa9ba159e81e9473d0', '2016-03-08 18:44:11', '2016-03-08 18:44:11', 1, 0, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36', '', 'https://gnic.io/switch/palacegate', '184.223.28.142', '/switch/palacegate/tools', NULL, '04703189579aded82b94f676b075efe4'),
+(3707, '/app-logic/system-apps/network/listlocalroutes.php', 'crumb', '184.223.28.142', 0, '', '2016-03-08 18:41:46', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle294@palacegate', 'a4e94eeea9cdef7f4a0797744ffcb5c7', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-03-08 12:41:46', '2016-03-08 12:41:46', 'de168462f05019c1fb635d7799f013e5', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/crumb', NULL, '04703189579aded82b94f676b075efe4'),
+(3708, '/app-logic/system-apps/network/network.php', 'palacegate', '66.87.145.54', 0, '', '2016-03-08 21:54:41', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle297@palacegate', '6f418bf394c2f2e2a15b2015a171fd6b', '', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2016-03-08 15:54:41', '2016-03-08 15:54:41', '35ed9b4624fc4fdf6b8962e897a788b5', '2016-03-08 22:00:19', '2016-03-08 22:00:19', 1, 0, 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Build/KVT', '', 'https://gnic.io/switch/palacegate', '66.87.145.54', '/switch/palacegate', NULL, 'fe6bf4164b8948e729c8f7f9660c8064'),
+(3709, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '66.87.145.54', 0, '', '2016-03-08 21:54:48', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle297@palacegate', '6f418bf394c2f2e2a15b2015a171fd6b', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2016-03-08 15:54:48', '2016-03-08 15:54:48', 'caecb2ae42ddac602fabf9ed8be856ca', '2016-03-08 21:59:56', '2016-03-08 21:59:56', 1, 0, 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Build/KVT', '', 'https://gnic.io/switch/palacegate', '66.87.145.54', '/switch/palacegate/tools', NULL, 'fe6bf4164b8948e729c8f7f9660c8064'),
+(3710, '/app-logic/system-apps/network/listlocalroutes.php', 'crumb', '66.87.145.54', 0, '', '2016-03-08 22:00:01', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle297@palacegate', '6f418bf394c2f2e2a15b2015a171fd6b', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Buil', 0, '2016-03-08 16:00:01', '2016-03-08 16:00:01', '05bb2612316efeaf357a00a3875319fd', '2016-03-08 22:00:17', '2016-03-08 22:00:17', 1, 0, 'Mozilla/5.0 (Linux; Android 4.4.2; C6725 Build/KVT', '', 'https://gnic.io/switch/palacegate', '66.87.145.54', '/switch/palacegate/crumb', NULL, 'fe6bf4164b8948e729c8f7f9660c8064'),
+(3711, '/app-logic/system-apps/network/network.php', 'palacegate', '184.223.33.140', 0, '', '2016-03-10 03:31:30', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle298@palacegate', '2b432fcb843860942d61ce4557547762', '', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-03-09 21:31:30', '2016-03-09 21:31:30', 'a9baeb51d6017f978b0b1269288a0b1b', '2016-03-10 03:33:20', '2016-03-10 03:33:20', 1, 0, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36', '', '', '184.223.33.140', '/switch/palacegate', NULL, '25fc82f7141568fc5b20fe353087a2a3'),
+(3712, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '184.223.33.140', 0, '', '2016-03-10 03:31:33', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle298@palacegate', '2b432fcb843860942d61ce4557547762', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-03-09 21:31:33', '2016-03-09 21:31:33', '7605e8cbf7b1a262a41a641c28c33848', '2016-03-10 03:33:52', '2016-03-10 03:33:52', 1, 0, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36', '', 'https://gnic.io/switch/palacegate', '184.223.33.140', '/switch/palacegate/tools', NULL, '25fc82f7141568fc5b20fe353087a2a3'),
+(3713, '/app-logic/system-apps/network/network.php', 'palacegate', '184.223.144.128', 0, '', '2016-03-28 03:19:53', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle299@palacegate', '72aef735bfe482054f17a4243e1df886', '', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-03-27 22:19:53', '2016-03-27 22:19:53', '652c27ea7b35acddd675607dd4fe70aa', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate', NULL, '3526cf8d68e718962be76f74dd2728ff'),
+(3714, '/app-logic/system-apps/network/network.php', 'palacegate', '184.223.29.40', 0, '', '2016-03-29 22:32:15', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle300@palacegate', '3a2456da365a0f92f1bfd40f21884333', '', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-03-29 17:32:15', '2016-03-29 17:32:15', '1427ccb743f2c5c8fd837439f26ca222', '2016-03-30 02:30:52', '2016-03-30 02:30:52', 1, 0, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36', '', '', '184.223.29.137', '/switch/palacegate', NULL, '8361b506f911365b682f80c99ca6e6da'),
+(3715, '/app-logic/system-apps/network/network.php', 'palacegate', '184.223.145.111', 0, '', '2016-03-31 17:51:00', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle301@palacegate', '852c6566938a22895b52a2c158acbf36', '', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-03-31 12:51:00', '2016-03-31 12:51:00', 'f8f1405c0f68214ade27adad53b699be', '2016-03-31 17:56:01', '2016-03-31 17:56:01', 1, 0, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36', '', '', '184.223.145.111', '/switch/palacegate', NULL, '298b81836fc1e9f6e642b23fa3d86765'),
+(3716, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '184.223.145.111', 0, '', '2016-03-31 17:55:05', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle301@palacegate', '852c6566938a22895b52a2c158acbf36', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-03-31 12:55:05', '2016-03-31 12:55:05', '8e924314f80ff0de05995b274cb4c717', '2016-03-31 17:55:28', '2016-03-31 17:55:28', 1, 0, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36', '', 'https://gnic.io/switch/palacegate', '184.223.145.111', '/switch/palacegate/tools', NULL, '298b81836fc1e9f6e642b23fa3d86765'),
+(3717, NULL, 'applications', '184.223.145.111', 0, '', '2016-03-31 17:55:33', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle301@palacegate', NULL, 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-03-31 12:55:33', '0000-00-00 00:00:00', '0e6ac783edebd96b52a8001670def537', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/applications', NULL, NULL),
+(3718, NULL, 'applications', '184.223.145.111', 0, '', '2016-03-31 17:55:40', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle301@palacegate', NULL, 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-03-31 12:55:40', '0000-00-00 00:00:00', '2b8967ab19ab1c802a1bfc3f011ee663', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/applications', NULL, NULL),
+(3719, '/app-logic/system-apps/network/listlocalroutes.php', 'crumb', '184.223.145.111', 0, '', '2016-03-31 17:55:54', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle301@palacegate', '852c6566938a22895b52a2c158acbf36', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-03-31 12:55:54', '2016-03-31 12:55:54', '0ed92dd7c953415ef8534695b04f71fd', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/crumb', NULL, '298b81836fc1e9f6e642b23fa3d86765'),
+(3720, '/app-logic/system-apps/network/listlocalroutes.php', 'crumb', '184.223.145.111', 0, '', '2016-03-31 17:55:54', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle301@palacegate', '852c6566938a22895b52a2c158acbf36', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-03-31 12:55:54', '2016-03-31 12:55:54', '717d586ab34d3d6291280982120f25eb', '2016-03-31 17:56:00', '2016-03-31 17:56:00', 1, 0, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36', '', 'https://gnic.io/switch/palacegate', '184.223.145.111', '/switch/palacegate/crumb', NULL, '298b81836fc1e9f6e642b23fa3d86765'),
+(3721, '/app-logic/system-apps/network/network.php', 'palacegate', '207.118.143.114', 0, '', '2016-04-22 07:24:53', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle302@palacegate', 'c9d392e8d8f69f71c9934238e25585c8', '', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-04-22 02:24:53', '2016-04-22 02:24:53', '8ae3409029e3b2f39240d842ff0666f7', '2016-04-22 08:38:36', '2016-04-22 08:38:36', 1, 0, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36', '', '', '207.118.143.114', '/switch/palacegate', NULL, 'd572045ba7738454a6feb511db9afa96'),
+(3722, NULL, 'applications', '207.118.143.114', 0, '', '2016-04-22 07:28:48', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle302@palacegate', NULL, 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-04-22 02:28:48', '0000-00-00 00:00:00', 'afe515a5302d430d54fa3d330f4a905f', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/applications', NULL, NULL),
+(3723, '/app-logic/system-apps/network/listlocalroutes.php', 'tools', '207.118.143.114', 0, '', '2016-04-22 07:28:57', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle302@palacegate', 'c9d392e8d8f69f71c9934238e25585c8', 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-04-22 02:28:57', '2016-04-22 02:28:57', '3e88554444e2997b20a0614726274a62', '2016-04-22 08:38:12', '2016-04-22 08:38:12', 1, 0, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36', '', 'https://gnic.io/switch/palacegate', '207.118.143.114', '/switch/palacegate/tools', NULL, 'd572045ba7738454a6feb511db9afa96'),
+(3724, NULL, 'applications', '207.118.143.114', 0, '', '2016-04-22 08:38:19', NULL, '0000-00-00 00:00:00', NULL, 'guestHandle302@palacegate', NULL, 'https://gnic.io/switch/palacegate', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/5', 0, '2016-04-22 03:38:19', '0000-00-00 00:00:00', '8678b5cd4c083a09a2b7b81f2ed59a71', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, 0, '', '', NULL, '', '/switch/palacegate/applications', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sessions`
+--
+
+CREATE TABLE IF NOT EXISTS `sessions` (
+  `pk_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `spu_key` int(11) DEFAULT NULL,
+  `spr_key` int(11) DEFAULT NULL,
+  `m_key` int(11) DEFAULT NULL,
+  `k_user_handle` varchar(120) NOT NULL,
+  `k_sess_id` varchar(120) NOT NULL,
+  `k_track_id` varchar(40) DEFAULT NULL,
+  `start_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `accessed_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `is_guest` tinyint(1) NOT NULL DEFAULT '0',
+  `run_state` tinyint(4) NOT NULL,
+  `start_client` varchar(40) NOT NULL,
+  `start_pro` varchar(40) NOT NULL,
+  `killed` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`pk_ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1525 ;
+
+--
+-- Dumping data for table `sessions`
+--
+
+INSERT INTO `sessions` (`pk_ID`, `spu_key`, `spr_key`, `m_key`, `k_user_handle`, `k_sess_id`, `k_track_id`, `start_time`, `accessed_time`, `is_guest`, `run_state`, `start_client`, `start_pro`, `killed`) VALUES
+(1385, NULL, NULL, NULL, 'd0fded50c097422a968c4797907ed0b2', '833bd412935633bf3b66d8c9e035f7bf', NULL, '2014-09-04 03:00:57', '2014-09-04 03:01:06', 1, 1, 'guestHandle163@root', 'stools', 0),
+(1386, NULL, NULL, NULL, '7779a2360b9614c265cef49dbd6aa4ea', '2c1318e7fe5047a4405020cd52e76dd0', NULL, '2014-12-17 15:26:31', '2014-12-18 15:21:55', 1, 1, 'guestHandle164@palacegate', 'palacegate', 0),
+(1387, NULL, NULL, NULL, '3588c7d206acf4e9dd17bcaa14f9d010', '3d22ba8dd022e12c2b62f63bf0076e73', NULL, '2014-12-18 07:11:30', '2014-12-18 07:11:30', 1, 1, 'guestHandle165@palacegate', 'palacegate', 0),
+(1388, NULL, NULL, NULL, '76545dfb08bf1043db1126595d41e386', 'e788cfad23d5f3980f17171220a714b0', NULL, '2014-12-18 15:26:43', '2014-12-18 17:45:16', 1, 1, 'guestHandle166@palacegate', 'palacegate', 0),
+(1389, NULL, NULL, NULL, 'de5017a866f06db9cb82b4c6f60a4f04', '245d13f891082a553a542f553e646923', NULL, '2014-12-19 07:15:50', '2014-12-20 03:38:31', 1, 1, 'guestHandle167@palacegate', 'palacegate', 0),
+(1390, NULL, NULL, NULL, '4b282a2007ee6da90e456f52a44ba6b8', 'e4a03fce105479262131bfb54a591980', NULL, '2014-12-19 18:07:06', '2014-12-19 18:13:41', 1, 1, 'guestHandle168@palacegate', 'palacegate', 0),
+(1391, NULL, NULL, NULL, 'e357b84b5c50345e46585eb561dbffe4', 'afcbeb4baac7e4ee1047cf7fb45eafc2', NULL, '2014-12-23 00:39:23', '2014-12-23 05:07:12', 1, 1, 'guestHandle169@palacegate', 'palacegate', 0),
+(1392, NULL, NULL, NULL, '49de4a1520f2bfc380d33565fb49a0a1', '9f5f5cf88db526ff0e51ae695db6a4c1', NULL, '2014-12-24 07:14:51', '2014-12-25 04:25:58', 1, 1, 'guestHandle170@root', 'stools', 0),
+(1393, NULL, NULL, NULL, '11cc108a35b689f58cb5c790ef377b2e', '9390cc0fbd48dbee196c56a33b925e2f', NULL, '2014-12-24 18:49:34', '2014-12-25 03:58:10', 1, 1, 'guestHandle171@palacegate', 'palacegate', 0),
+(1394, NULL, NULL, NULL, '76f19f91875e27ab70577f33a029ca91', '1f717f798eb4713a1b50b1baa020004c', NULL, '2014-12-24 21:20:36', '2014-12-24 21:20:36', 1, 1, 'guestHandle172@root', 'stools', 0),
+(1395, NULL, NULL, NULL, 'd98902c1b5dd6f1541a0b357a141d1c0', 'cb734b9c10fda30da84e6f39e1c1297a', NULL, '2014-12-24 21:20:36', '2014-12-24 21:20:36', 1, 2, 'guestHandle173@root', 'stools', 0),
+(1396, NULL, NULL, NULL, '8f1809d16742dc502b98776955a126ca', '13e2a80b3954d936b9df15065e48029d', NULL, '2014-12-25 04:17:51', '2014-12-25 04:18:56', 1, 1, 'guestHandle174@palacegate', 'palacegate', 0),
+(1397, NULL, NULL, NULL, '9dffa42a145fb37d357509ada777829f', '92d944af86ccfbc60cfdb79944c1660c', NULL, '2014-12-25 04:48:25', '2014-12-25 04:48:25', 1, 2, 'guestHandle175@palacegate', 'palacegate', 0),
+(1398, NULL, NULL, NULL, 'f6ba8b8115c2a7eb49868d64c4101bd3', '52ff6ed94482aba36b062f0609aa9633', NULL, '2014-12-25 04:48:25', '2014-12-25 04:48:25', 1, 1, 'guestHandle176@palacegate', 'palacegate', 0),
+(1399, NULL, NULL, NULL, 'e6bc7c1e53dec675ac9c9c589f778f21', '19a43908f9d15edddbc97ad9579e1017', NULL, '2014-12-26 05:07:06', '2014-12-26 05:07:06', 1, 2, 'guestHandle177@palacegate', 'palacegate', 0),
+(1400, NULL, NULL, NULL, '056d8a74397a8cd9b084f8baa208ea05', '1d01a084dbeae592f32dc074ab1737fd', NULL, '2014-12-26 05:07:06', '2014-12-26 05:07:06', 1, 2, 'guestHandle178@palacegate', 'palacegate', 0),
+(1401, NULL, NULL, NULL, '8e89e8db446995df4688c1a16069c557', '97c3f866044250b7d822b2c75275b19c', NULL, '2014-12-27 04:52:11', '2014-12-27 04:52:11', 1, 2, 'guestHandle179@palacegate', 'palacegate', 0),
+(1402, NULL, NULL, NULL, 'a4a5f28c66982e29816168fb7fd19b10', 'b5b8e18b02bba6707f9e71c335e6d34c', NULL, '2014-12-28 03:59:36', '2014-12-28 03:59:36', 1, 2, 'guestHandle180@palacegate', 'palacegate', 0),
+(1403, NULL, NULL, NULL, '251603f7ae039c5e00d54db630dc549e', '42d30c1177b0ccacb659e6a1dfda3570', NULL, '2014-12-29 04:49:58', '2014-12-29 04:49:58', 1, 2, 'guestHandle181@palacegate', 'palacegate', 0),
+(1404, NULL, NULL, NULL, '9f41fdfd414a82677ab60fa70b3140e5', '6218963d0f8b1643380f1401cd07072e', NULL, '2014-12-30 00:08:00', '2014-12-30 00:08:00', 1, 2, 'guestHandle182@palacegate', 'palacegate', 0),
+(1405, NULL, NULL, NULL, '4189b9085fb3f69245414f713e3bbb03', '46a9330c499e78c85fdef91e1744d5fc', NULL, '2014-12-30 22:26:13', '2014-12-30 22:26:13', 1, 2, 'guestHandle183@palacegate', 'palacegate', 0),
+(1406, NULL, NULL, NULL, '97b343885d0920c5b44fa410d3f70e3e', 'f41796cbedd08497335eac248aaf7667', NULL, '2014-12-30 22:26:13', '2014-12-30 22:26:13', 1, 2, 'guestHandle184@palacegate', 'palacegate', 0),
+(1407, NULL, NULL, NULL, 'a56213859382d59dfb979c149331109b', '42fb382b1e87b82b473d4ae868359e94', NULL, '2015-01-01 00:25:42', '2015-01-01 00:25:42', 1, 2, 'guestHandle185@palacegate', 'palacegate', 0),
+(1408, NULL, NULL, NULL, '183c01d8421c6ebf33df33aacdd591d7', '15c0f27231972b8cb8c2823cc9727f08', NULL, '2015-01-03 01:56:26', '2015-01-03 01:56:26', 1, 2, 'guestHandle186@palacegate', 'palacegate', 0),
+(1409, NULL, NULL, NULL, '0e8297b448122259cead1afd974d20fc', 'f22fefdaf503493caf221525c1c3a330', NULL, '2015-01-03 02:11:10', '2015-01-03 02:11:31', 1, 1, 'guestHandle187@palacegate', 'palacegate', 0),
+(1410, NULL, NULL, NULL, '7f66c571e0828a85367cafc635b47cdb', '23cc6af3c1b25e2b803b21a6233a20c9', NULL, '2015-01-04 01:06:58', '2015-01-04 01:06:58', 1, 2, 'guestHandle188@palacegate', 'palacegate', 0),
+(1411, NULL, NULL, NULL, '6b7979d9845e1b02e845639f92a0a199', 'b43ead14e5cafd61b7047d8416c9ac51', NULL, '2015-01-06 00:46:36', '2015-01-06 00:46:36', 1, 2, 'guestHandle189@palacegate', 'palacegate', 0),
+(1412, NULL, NULL, NULL, '4de5834f4666cb622e1c21fe4b273b8b', '83425ea1fe5e7ec873e57a235ad40c78', NULL, '2015-01-06 22:02:23', '2015-01-06 23:23:25', 1, 1, 'guestHandle190@palacegate', 'palacegate', 0),
+(1413, NULL, NULL, NULL, '6ac8c62fff2c505c8731182e96237a3e', '603309dc9338a036b6f94671ed573857', NULL, '2015-01-06 23:21:58', '2015-01-06 23:21:58', 1, 1, 'guestHandle191@root', 'stools', 0),
+(1414, NULL, NULL, NULL, '074e33d9345be6ea9c73ea9519c07172', '125d4340a6b4039a6d7f17eaf9a48fe4', NULL, '2015-01-07 01:11:38', '2015-01-07 01:11:38', 1, 2, 'guestHandle192@palacegate', 'palacegate', 0),
+(1415, NULL, NULL, NULL, '8068dfcbd8249fe22b02003921df51de', 'c60e1e59f09c47dd74780a8506e880ca', NULL, '2015-01-07 02:28:26', '2015-01-07 02:28:57', 1, 1, 'guestHandle193@palacegate', 'palacegate', 0),
+(1416, NULL, NULL, NULL, '588bb451b6691186951e5ebdb42566b4', '99e59ebf5e7671d103332a818c49bd52', NULL, '2015-01-11 14:22:45', '2015-01-11 14:35:00', 1, 1, 'guestHandle194@root', 'stools', 0),
+(1417, NULL, NULL, NULL, '4649a40c7d213e0715c47d11c633c035', '385c56f388d40c9c3ad57d9d667f3b17', NULL, '2015-01-13 01:27:43', '2015-01-13 01:29:01', 1, 1, 'guestHandle195@palacegate', 'palacegate', 0),
+(1418, NULL, NULL, NULL, '021bbea2a92745f63cd745b8e8af1535', '1481fa08f355a89efd15e59def130678', NULL, '2015-01-17 08:37:58', '2015-01-17 08:38:51', 1, 1, 'guestHandle196@palacegate', 'palacegate', 0),
+(1419, NULL, NULL, NULL, 'a662813f6f16f8b9de1608001ed39cd0', '963c9cad5b3d5907f3fa83277d0e89ca', NULL, '2015-01-20 20:08:36', '2015-01-20 20:08:36', 1, 1, 'guestHandle197@palacegate', 'palacegate', 0),
+(1420, NULL, NULL, NULL, '65fc8d3430ae65a766bd04e81b89d9da', '462795c56461e8bfcdc0313c09e0e743', NULL, '2015-01-22 22:12:05', '2015-01-22 22:12:05', 1, 1, 'guestHandle198@palacegate', 'palacegate', 0),
+(1421, NULL, NULL, NULL, 'b2f6d031782b27917f74eb896b4bde15', '6e59631cb8c64c6f072b1e3ed3b91e27', NULL, '2015-01-24 03:54:26', '2015-01-24 03:54:32', 1, 1, 'guestHandle199@palacegate', 'palacegate', 0),
+(1422, NULL, NULL, NULL, 'a5e2f042e2038ae05f9b128bc1ebe427', 'bef74aa030eec0e612bdb31acc232667', NULL, '2015-02-03 16:31:15', '2015-02-03 16:31:15', 1, 1, 'guestHandle200@palacegate', 'palacegate', 0),
+(1423, NULL, NULL, NULL, '91900d0d888b1609d50ee4cdba011fde', '9ea9126de1fe8840368b521cd9bb5471', NULL, '2015-02-08 06:20:39', '2015-02-08 06:20:39', 1, 1, 'guestHandle201@palacegate', 'palacegate', 0),
+(1424, NULL, NULL, NULL, '15849952a589a287d9cade1db12c0d9b', '4334163b74ba945106267cdeb07f1799', NULL, '2015-03-08 04:42:53', '2015-03-08 04:43:00', 1, 1, 'guestHandle202@palacegate', 'palacegate', 0),
+(1425, NULL, NULL, NULL, 'd0417986d65d95878a5007e29b78a2dd', 'fc016fbb0e571100ceb2fe833a208b37', NULL, '2015-03-16 23:20:16', '2015-03-16 23:20:55', 1, 1, 'guestHandle203@palacegate', 'palacegate', 0),
+(1426, NULL, NULL, NULL, 'e29712d788cd1db7803e725006fc02c2', '7fb5c185312e381f036a62daa118fbb4', NULL, '2015-04-01 02:11:27', '2015-04-01 02:11:27', 1, 1, 'guestHandle204@palacegate', 'palacegate', 0),
+(1427, NULL, NULL, NULL, '182122f266bdd8e7f205e33dd9d9bf01', '9da5d79502391badd9512e50ee6c392f', NULL, '2015-04-04 03:31:08', '2015-04-04 03:31:08', 1, 1, 'guestHandle205@palacegate', 'palacegate', 0),
+(1428, NULL, NULL, NULL, '8a03604683cf48a4ecb7e16806c0c791', '136e1a0a4eac0ff8ba7068fe398f140f', NULL, '2015-05-27 02:24:17', '2015-05-27 02:24:17', 1, 1, 'guestHandle206@palacegate', 'palacegate', 0),
+(1429, NULL, NULL, NULL, '9f57e120e3a7e0ff03d2714dd295e9cf', '1407752e54f5236df035fdf4f3efe2a3', NULL, '2015-05-31 06:34:00', '2015-05-31 06:34:00', 1, 1, 'guestHandle207@palacegate', 'palacegate', 0),
+(1430, NULL, NULL, NULL, '2f04409bb11833048881a9ea061cecbf', 'bc3e6a115add0e1f7cc3904f04ca1a8d', NULL, '2015-05-31 23:47:13', '2015-05-31 23:47:13', 1, 1, 'guestHandle208@palacegate', 'palacegate', 0),
+(1431, NULL, NULL, NULL, 'feadad01010ee6aad17beb4fcb6fb07d', '16ae023c67f6429c99bfcb35c27f7ecf', NULL, '2015-06-17 04:23:20', '2015-06-17 04:23:20', 1, 1, 'guestHandle209@palacegate', 'palacegate', 0),
+(1432, NULL, NULL, NULL, 'd10f917fad32a4f63d9ba3e5586be491', '0aaa22f753cb99df044f87fcf442a6ae', NULL, '2015-07-14 03:06:47', '2015-07-14 03:06:47', 1, 1, 'guestHandle210@palacegate', 'palacegate', 0),
+(1433, NULL, NULL, NULL, '0989a065509f42dd560750c2a55c0853', '1b84123b627f86ea3dadad4191a71cc6', NULL, '2015-08-01 04:29:20', '2015-08-01 04:29:20', 1, 1, 'guestHandle211@palacegate', 'palacegate', 0),
+(1434, NULL, NULL, NULL, 'ec5820bb8a998b874e929d7b64781f22', '5f7d841733ff6b414bd4eb3612ff2056', NULL, '2015-08-06 09:26:34', '2015-08-06 23:14:36', 1, 1, 'guestHandle212@palacegate', 'palacegate', 0),
+(1435, NULL, NULL, NULL, '9ca744d235f44a1cce50230eb909eed2', 'b4c8a25c9331fbb597df75dc15e6c877', NULL, '2015-08-20 03:25:52', '2015-08-20 03:27:34', 1, 1, 'guestHandle213@palacegate', 'palacegate', 0),
+(1436, NULL, NULL, NULL, '33decf8c393e0f4e22433344faf29c15', '727d8b1105af0701eec2ea1a89875588', NULL, '2015-09-12 22:56:44', '2015-09-13 01:32:53', 1, 1, 'guestHandle214@palacegate', 'palacegate', 0),
+(1437, NULL, NULL, NULL, '0398671a569d671f854dba3b66b3fc76', '8c2868b10c8cc44b14680c9fac631de8', NULL, '2015-09-22 01:28:42', '2015-09-22 04:04:03', 1, 1, 'guestHandle215@palacegate', 'palacegate', 0),
+(1438, NULL, NULL, NULL, 'e25047a0bbd3e0d9b797bd05c9dc0266', '3111ef6752097cbbdb10e94be334cbca', NULL, '2015-09-24 10:36:51', '2015-09-25 03:49:15', 1, 1, 'guestHandle216@palacegate', 'tools', 0),
+(1439, NULL, NULL, NULL, 'bba6ff90773c932a5c59cc73eb5b13ad', '7ac2688271d7475387dfb979f73f6fa7', NULL, '2015-09-27 01:34:42', '2015-09-27 02:36:30', 1, 1, 'guestHandle217@palacegate', 'palacegate', 0),
+(1440, NULL, NULL, NULL, '3187625152ea8acffa039d01c0630a30', 'f4d192f901346f69b1bf3eb0e29655b5', NULL, '2015-09-28 01:57:15', '2015-09-28 04:06:25', 1, 1, 'guestHandle218@palacegate', 'palacegate', 0),
+(1441, NULL, NULL, NULL, '294161277d16d625d6753da2dc8774e7', '803f5fe49d81bc7c7586af23f16a9abb', NULL, '2015-09-29 02:49:20', '2015-09-29 03:58:22', 1, 1, 'guestHandle219@palacegate', 'crumb', 0),
+(1442, NULL, NULL, NULL, '39269daf2947ddc0ed8d4c374660cda6', '3bc64abdfb15f538ce45905feae8fac8', NULL, '2015-10-03 23:09:56', '2015-10-04 01:04:57', 1, 1, 'guestHandle220@palacegate', 'palacegate', 0),
+(1443, NULL, NULL, NULL, 'd8a3caa920abd7ed1904a00b7535cb8f', '80985b1aae9c0cd5b4a0ee8d1775e71d', NULL, '2015-10-04 00:30:38', '2015-10-04 00:30:38', 1, 1, 'guestHandle221@palacegate', 'palacegate', 0),
+(1444, NULL, NULL, NULL, '35ffa701fd87703734e6ef8983c5b341', '2a7ca906e9cc1920964ae26bebe7f0b3', NULL, '2015-10-10 23:31:32', '2015-10-10 23:32:51', 1, 1, 'guestHandle222@palacegate', 'palacegate', 0),
+(1445, NULL, NULL, NULL, 'e884f3ce5170846ae0a29a1f588cdd4a', '34be09e29cca125b95e0acc2187dc994', NULL, '2015-10-10 23:36:28', '2015-10-10 23:36:28', 1, 2, 'guestHandle223@palacegate', 'crumb', 0),
+(1446, NULL, NULL, NULL, 'eedec37fb424c1dbbf83b3bf4ec55ca5', '49b5c60ede91bc1641e541b53d2a53ac', NULL, '2015-10-10 23:36:48', '2015-10-10 23:36:48', 1, 1, 'guestHandle224@palacegate', 'crumb', 0),
+(1447, NULL, NULL, NULL, '31a3d7f3849e1a544b30f4afcfa2aa82', '0fe88d9c0c3ec7377c444835966634de', NULL, '2015-10-29 03:38:59', '2015-10-29 03:43:23', 1, 1, 'guestHandle225@palacegate', 'palacegate', 0),
+(1448, NULL, NULL, NULL, '7a6d83464f27770a95c35f7bf009e776', 'd56e92b277c7f07168b95d30892e724a', NULL, '2015-10-30 20:02:18', '2015-10-30 20:08:25', 1, 1, 'guestHandle226@palacegate', 'palacegate', 0),
+(1449, NULL, NULL, NULL, 'a69b16f5558c906c75f51c669df98589', 'ba871b20842b8ccd597727ec386b95d1', NULL, '2015-11-05 22:00:03', '2015-11-05 22:02:21', 1, 1, 'guestHandle227@palacegate', 'palacegate', 0),
+(1450, NULL, NULL, NULL, '11efa153392385ca8e65d356ecd98807', 'deb13a4fe9b4c6e11bec4f950d33107e', NULL, '2015-11-05 23:06:07', '2015-11-05 23:06:08', 1, 1, 'guestHandle228@palacegate', 'palacegate', 0),
+(1451, NULL, NULL, NULL, '68b1a6109c395a96f0134fb025b3ce83', '378e966f9b662054c1354e156f8d3ceb', NULL, '2015-11-09 16:26:40', '2015-11-09 16:47:08', 1, 1, 'guestHandle229@palacegate', 'palacegate', 0),
+(1452, NULL, NULL, NULL, 'cd817a17efe8932c1ee8cc3bb9004b65', 'b4ac5dadf2ffa54b60ca1f9615d1b0c3', NULL, '2015-11-11 20:55:59', '2015-11-11 21:08:48', 1, 1, 'guestHandle230@palacegate', 'tools', 0),
+(1453, NULL, NULL, NULL, 'ced551eeb072f65550a619199588f468', '88755a3b9df1aa26015730f2e6cf3e3e', NULL, '2015-11-19 20:43:34', '2015-11-19 23:38:41', 1, 1, 'guestHandle231@palacegate', 'tools', 0),
+(1454, NULL, NULL, NULL, '4209a8181f5f34fc954d78eae091da5b', '4d5834f5be52f4aab664846cbc7f0643', NULL, '2015-11-23 03:53:49', '2015-11-23 03:53:56', 1, 1, 'guestHandle232@palacegate', 'palacegate', 0),
+(1455, NULL, NULL, NULL, '8074eb9a329be8d686ad84617346af0d', '9aff9d23992be8f85177d5e4e124cc95', NULL, '2015-12-20 19:58:40', '2015-12-20 19:58:40', 1, 1, 'guestHandle233@palacegate', 'tools', 0),
+(1456, NULL, NULL, NULL, '7c3780e224f3618ae5dfc847edad5d0a', 'bb1e0a3e2aa7dc0b4822107c27a85861', NULL, '2016-01-14 23:25:19', '2016-01-14 23:32:45', 1, 1, 'guestHandle234@palacegate', 'palacegate', 0),
+(1457, NULL, NULL, NULL, 'a49f7f001e038abac0777245f2755206', 'f996b8916e0ac8cb91c43ce64c388da5', NULL, '2016-01-15 06:10:20', '2016-01-15 06:10:20', 1, 1, 'guestHandle235@palacegate', 'palacegate', 0),
+(1458, NULL, NULL, NULL, '779f859b57525dd203f28de579dcd177', 'daad8d06bb94be70a20d057d1584e1ef', NULL, '2016-01-22 03:47:08', '2016-01-22 03:49:00', 1, 1, 'guestHandle236@palacegate', 'palacegate', 0),
+(1459, NULL, NULL, NULL, 'd7a5111952e42df487ce0c11d6e151e5', '76b044f8b430b01e5bff79aadf99f897', NULL, '2016-01-23 17:51:31', '2016-01-23 17:52:00', 1, 1, 'guestHandle237@palacegate', 'tools', 0),
+(1460, NULL, NULL, NULL, '8057bc1adcd4c6ddb40f015dd61c9b1d', '169665d0e6f1e3dba8c4cbc8d62ca963', NULL, '2016-02-14 01:34:43', '2016-02-14 01:40:11', 1, 1, 'guestHandle238@palacegate', 'palacegate', 0),
+(1461, NULL, NULL, NULL, '4b910000befed337a7878ee3dc3ec773', 'c469928c6a115f14ad892c9278f1629c', NULL, '2016-02-14 04:12:23', '2016-02-14 04:12:23', 1, 1, 'guestHandle239@palacegate', 'palacegate', 0),
+(1462, NULL, NULL, NULL, 'aebb45e49c0898f8613d47568125bb55', '7439f8c9f70525e165849e14b350c875', NULL, '2016-02-14 04:26:23', '2016-02-14 04:26:23', 1, 1, 'guestHandle240@palacegate', 'crumb', 0),
+(1463, NULL, NULL, NULL, 'b2d6dfafc1bac9b5969cd647139a5a79', '807c4d4f926f708b2342d18f3ff7b992', NULL, '2016-02-14 04:40:11', '2016-02-14 04:40:11', 1, 1, 'guestHandle241@palacegate', 'palacegate', 0),
+(1464, NULL, NULL, NULL, 'f9fba2c2ddcb1084550e67674cb9236a', '46ad3ff6b57e864e125472ed4e6ae8c6', NULL, '2016-02-14 04:40:32', '2016-02-14 06:00:13', 1, 1, 'guestHandle242@palacegate', 'crumb', 0),
+(1465, NULL, NULL, NULL, 'a236a365b3eddc57af22829d08df5c40', '4ab4e2d3fb5a85d22c5db317e82fd911', NULL, '2016-02-14 05:19:33', '2016-02-14 05:19:33', 1, 2, 'guestHandle243@palacegate', 'crumb', 0),
+(1466, NULL, NULL, NULL, 'ee777e7062c508baaf33ade29a23b7ee', '188e7491e26b745d548fbfbf48173784', NULL, '2016-02-14 05:19:33', '2016-02-14 05:19:33', 1, 2, 'guestHandle244@palacegate', 'crumb', 0),
+(1467, NULL, NULL, NULL, 'c1f71a8cd881793c11b789afeb404aec', 'e4d8532fc12f12990e0cae132cd69448', NULL, '2016-02-14 05:19:33', '2016-02-14 05:19:33', 1, 2, 'guestHandle245@palacegate', 'crumb', 0),
+(1468, NULL, NULL, NULL, '04555f22deb76cf13baf7bec6f52972d', 'fee472fd1207d55f6c5b04aaf360533b', NULL, '2016-02-14 05:19:33', '2016-02-14 05:19:33', 1, 2, 'guestHandle246@palacegate', 'crumb', 0),
+(1469, NULL, NULL, NULL, 'ec1584417336dab000b7c5ff723992d0', '0b8df1426fc8ec9957370dc1e184c08e', NULL, '2016-02-14 05:19:33', '2016-02-14 05:19:33', 1, 2, 'guestHandle247@palacegate', 'crumb', 0),
+(1470, NULL, NULL, NULL, 'c30df0bdb69896e3a0641577c104949b', 'de28381d937df2ecb67d6de2a42fd8f0', NULL, '2016-02-14 05:19:33', '2016-02-14 05:19:33', 1, 2, 'guestHandle248@palacegate', 'crumb', 0),
+(1471, NULL, NULL, NULL, '3a71f1c0a3a2d8012a5ee0fe55ba3a28', 'fa59d34a91c2fced0c948ccbca82689a', NULL, '2016-02-14 05:19:34', '2016-02-14 05:19:34', 1, 2, 'guestHandle249@palacegate', 'crumb', 0),
+(1472, NULL, NULL, NULL, 'a85ce390f2fc70453cbff11650064c00', '04bf03feadd3deb511a2383bd635fe64', NULL, '2016-02-14 05:19:34', '2016-02-14 05:19:34', 1, 2, 'guestHandle250@palacegate', 'crumb', 0),
+(1473, NULL, NULL, NULL, 'b13837b64970ea68fa9a91eba2601995', '082037e2cad5d76e97278e82fb87ab41', NULL, '2016-02-14 05:19:34', '2016-02-14 05:19:34', 1, 2, 'guestHandle251@palacegate', 'crumb', 0),
+(1474, NULL, NULL, NULL, 'dbefd719107f1224cf15bb34c34caa91', '5bd805a943bb8b9729f9a7458adc91c7', NULL, '2016-02-14 05:19:34', '2016-02-14 05:19:34', 1, 2, 'guestHandle252@palacegate', 'crumb', 0),
+(1475, NULL, NULL, NULL, 'c17ad03c632557ef847f1fa3e84a8b0e', '8c4f167c4ac3fbb1e09c104f0347fee9', NULL, '2016-02-14 05:19:34', '2016-02-14 05:19:34', 1, 2, 'guestHandle253@palacegate', 'crumb', 0),
+(1476, NULL, NULL, NULL, '716726ab6ff82990cf280ce3f8661ab8', 'aa893be7ea4ba5dc25d67271a7f35f61', NULL, '2016-02-14 05:19:34', '2016-02-14 05:19:34', 1, 2, 'guestHandle254@palacegate', 'crumb', 0),
+(1477, NULL, NULL, NULL, '5995f26afc5616f1691930504c89aafc', '32d9bc924c02540abb3f74bd8f644d43', NULL, '2016-02-14 05:19:34', '2016-02-14 05:19:34', 1, 2, 'guestHandle255@palacegate', 'crumb', 0),
+(1478, NULL, NULL, NULL, '6bae9800e9db48a268239a2bbc3e336e', '60a5cd794e683a6b6bd383bcc29d4b4e', NULL, '2016-02-14 05:19:34', '2016-02-14 05:19:34', 1, 2, 'guestHandle256@palacegate', 'crumb', 0),
+(1479, NULL, NULL, NULL, 'e578ef93cfd0cfac1136d934a755df96', '874987e116230f8e497f5bbb5a38ad04', NULL, '2016-02-14 05:19:34', '2016-02-14 05:19:34', 1, 2, 'guestHandle257@palacegate', 'crumb', 0),
+(1480, NULL, NULL, NULL, 'e803c28e61493a9b43fb2287d65cb24a', '951941dd76df892f39e3614dbc12af26', NULL, '2016-02-14 05:19:34', '2016-02-14 05:19:34', 1, 2, 'guestHandle258@palacegate', 'crumb', 0),
+(1481, NULL, NULL, NULL, '6ad15c573c01629e8b486ed6af4fd6a8', 'ea84c6f8433737f604ea5c4e9aab2062', NULL, '2016-02-14 05:19:34', '2016-02-14 05:19:34', 1, 2, 'guestHandle259@palacegate', 'crumb', 0),
+(1482, NULL, NULL, NULL, '478a22e6cbf0cd6ed9ceb002925c4ccf', 'c024583258a07bc8024a6ea47ae9f89c', NULL, '2016-02-14 05:19:34', '2016-02-14 05:19:34', 1, 2, 'guestHandle260@palacegate', 'crumb', 0),
+(1483, NULL, NULL, NULL, 'fa865672ff1f20c9f21c996baa685b23', '08152d021299a9411f827cd2940bcb34', NULL, '2016-02-14 05:19:34', '2016-02-14 05:19:34', 1, 2, 'guestHandle261@palacegate', 'crumb', 0),
+(1484, NULL, NULL, NULL, '69666214307e238e212a1e7f9096807b', '89279fa8ea583f293b7a01e146f8299f', NULL, '2016-02-14 05:19:34', '2016-02-14 05:19:34', 1, 2, 'guestHandle262@palacegate', 'crumb', 0),
+(1485, NULL, NULL, NULL, '4b3b40c50ce6dd2f0f567f0474ff70f2', 'a8e3875ad4b8848139fb30fdf97c23b0', NULL, '2016-02-14 05:19:35', '2016-02-14 05:19:35', 1, 2, 'guestHandle263@palacegate', 'crumb', 0),
+(1486, NULL, NULL, NULL, '9356955e8e50888ea62c05a0f9ca777e', 'd04e6f487085fc55af477a0a64607af9', NULL, '2016-02-14 05:46:00', '2016-02-14 05:46:00', 1, 2, 'guestHandle264@palacegate', 'crumb', 0),
+(1487, NULL, NULL, NULL, '197e3402b44d86f003faf09a8f47f24a', '2604afabf60a7fd6e1e34b58cea0daf9', NULL, '2016-02-14 05:46:01', '2016-02-14 05:46:01', 1, 2, 'guestHandle265@palacegate', 'crumb', 0),
+(1488, NULL, NULL, NULL, '47b6e00e14e2d5cc97db2740056ea82a', '14f29e95196cb5e46038f6923a2905d1', NULL, '2016-02-14 05:46:01', '2016-02-14 05:46:01', 1, 2, 'guestHandle266@palacegate', 'crumb', 0),
+(1489, NULL, NULL, NULL, '616765c3076abc74b61b320436826703', '1df4c90feeadddef1d3adc9b26edfe06', NULL, '2016-02-14 05:46:01', '2016-02-14 05:46:01', 1, 2, 'guestHandle267@palacegate', 'crumb', 0),
+(1490, NULL, NULL, NULL, 'd5d8c76f58ff44ecbc2af35135512efb', '794a9abb6d99a2951ee0e0a0da147ede', NULL, '2016-02-14 05:46:01', '2016-02-14 05:46:01', 1, 2, 'guestHandle268@palacegate', 'crumb', 0),
+(1491, NULL, NULL, NULL, '2071a5f528b1627a231eff751c18e2f5', 'ebb1d198978ffe6b1c22aa3f474710fc', NULL, '2016-02-14 05:46:01', '2016-02-14 05:46:01', 1, 2, 'guestHandle269@palacegate', 'crumb', 0),
+(1492, NULL, NULL, NULL, 'bf0fae140a9387fe4b9f7e21bedbe8ee', 'bf1ebc28082297c860efc15c25e84730', NULL, '2016-02-14 05:46:01', '2016-02-14 05:46:01', 1, 2, 'guestHandle270@palacegate', 'crumb', 0),
+(1493, NULL, NULL, NULL, '15ca51ba01d52814e6f3e6639e4b0375', 'df90135705e5fe6ee69f857cecc2a3f9', NULL, '2016-02-14 05:46:01', '2016-02-14 05:46:01', 1, 2, 'guestHandle271@palacegate', 'crumb', 0),
+(1494, NULL, NULL, NULL, '08861b867ff6f5bd6f2d3ac8128ff19c', '89ff5971040b39eb2f0f16891d309822', NULL, '2016-02-14 05:46:01', '2016-02-14 05:46:01', 1, 2, 'guestHandle272@palacegate', 'crumb', 0),
+(1495, NULL, NULL, NULL, 'ecf30879853b01c9fa4ca851e9ef25e3', 'fbeeb155b256323cebffbc102622e262', NULL, '2016-02-14 05:46:01', '2016-02-14 05:46:01', 1, 2, 'guestHandle273@palacegate', 'crumb', 0),
+(1496, NULL, NULL, NULL, 'bf4e3942d9674eca1cf1a9490c8f40d2', '429c7ce2ca9c58c255c4be4ddffd98e2', NULL, '2016-02-14 05:46:01', '2016-02-14 05:46:01', 1, 2, 'guestHandle274@palacegate', 'crumb', 0),
+(1497, NULL, NULL, NULL, '3e1276ae6d010af40cffa6ecee140079', 'eed7fa453fd0918dcaf352286cd36f62', NULL, '2016-02-14 05:46:01', '2016-02-14 05:46:01', 1, 2, 'guestHandle275@palacegate', 'crumb', 0),
+(1498, NULL, NULL, NULL, 'f892ab54d81b276790c139361dbd541e', '872e5eab6b06ac3b005ee9f893bbf194', NULL, '2016-02-14 05:46:01', '2016-02-14 05:46:01', 1, 2, 'guestHandle276@palacegate', 'crumb', 0),
+(1499, NULL, NULL, NULL, 'bda83eaeb5f9d0e0fde7ef860a01c933', 'b80c034fcb0cf019e7e1408fe0a2539d', NULL, '2016-02-14 05:46:01', '2016-02-14 05:46:01', 1, 2, 'guestHandle277@palacegate', 'crumb', 0),
+(1500, NULL, NULL, NULL, 'd668ff75d7cb07f57e92925f0a3b32e2', '21fd569846f23dc9180f165049c9c5f9', NULL, '2016-02-14 05:46:02', '2016-02-14 05:46:02', 1, 2, 'guestHandle278@palacegate', 'crumb', 0),
+(1501, NULL, NULL, NULL, 'a6715dc203bde4398027e34913edc613', 'f96ab01e34dba4d28f0651d1c49e7070', NULL, '2016-02-14 05:46:02', '2016-02-14 05:46:02', 1, 2, 'guestHandle279@palacegate', 'crumb', 0),
+(1502, NULL, NULL, NULL, 'a48868bf8c033d0d51a206789fe224d4', '2d2b5449eeaa6d23dd1e4aa3e87855de', NULL, '2016-02-14 05:46:02', '2016-02-14 05:46:02', 1, 2, 'guestHandle280@palacegate', 'crumb', 0),
+(1503, NULL, NULL, NULL, '007f3acb428b13d433f0e019e7461d7c', '09cfb6c86de4e8b07f5bf9df01d63a57', NULL, '2016-02-14 05:46:02', '2016-02-14 05:46:02', 1, 2, 'guestHandle281@palacegate', 'crumb', 0),
+(1504, NULL, NULL, NULL, 'ddfed3d125e64db96e5a4a9ebc542141', 'c2b9419755b9d3ff5630bbf562bf0c93', NULL, '2016-02-14 05:46:02', '2016-02-14 05:46:02', 1, 2, 'guestHandle282@palacegate', 'crumb', 0),
+(1505, NULL, NULL, NULL, '2e8085cc2e47ad25138ea6238c9a2ff9', '567c1731f36a27476f1fa234a8f88b99', NULL, '2016-02-14 05:46:02', '2016-02-14 05:46:02', 1, 2, 'guestHandle283@palacegate', 'crumb', 0),
+(1506, NULL, NULL, NULL, 'b1284f60a3ff1043528334ac48f605bf', 'b16d806d6b025d26632b8f5b5b945904', NULL, '2016-02-14 05:46:02', '2016-02-14 05:46:02', 1, 2, 'guestHandle284@palacegate', 'crumb', 0),
+(1507, NULL, NULL, NULL, 'b32ef0eab7b75f8af34f91c3e41fb3b5', 'e66671819b5da7d3aed747c9fdd653cf', NULL, '2016-02-14 05:46:39', '2016-02-14 05:46:39', 1, 2, 'guestHandle285@palacegate', 'crumb', 0),
+(1508, NULL, NULL, NULL, 'a1657fca7d7fdee1bd75d1a334d529c0', 'a217694a795077d75a353c49b785d7d2', NULL, '2016-02-14 05:46:39', '2016-02-14 05:46:39', 1, 2, 'guestHandle286@palacegate', 'crumb', 0),
+(1509, NULL, NULL, NULL, '36a48e2aacca5473ebb884362b8f4c2a', '34249464b8d4bc806d37dba9a52d3e59', NULL, '2016-02-14 05:46:39', '2016-02-14 05:46:39', 1, 2, 'guestHandle287@palacegate', 'crumb', 0),
+(1510, NULL, NULL, NULL, '881ac24cd17e0ba67b2afb292ea8afa5', 'dbac5023608309b72f89136f65f47a58', NULL, '2016-02-14 05:46:39', '2016-02-14 05:46:39', 1, 2, 'guestHandle288@palacegate', 'crumb', 0),
+(1511, NULL, NULL, NULL, '90d32d214237ab8c570c20dd1786ee14', '36d92e96112e71cf0db9bb1fedd6b1d3', NULL, '2016-02-14 05:46:39', '2016-02-14 05:46:39', 1, 2, 'guestHandle289@palacegate', 'crumb', 0),
+(1512, NULL, NULL, NULL, '35bd9f68485df1bdca2e20e65a30bcdc', 'fe5e26eee8db26226726b0979f387278', NULL, '2016-02-14 05:46:39', '2016-02-14 05:46:39', 1, 2, 'guestHandle290@palacegate', 'crumb', 0),
+(1513, NULL, NULL, NULL, '841bb3616c373d9883cc542754856e9d', '3efbcf4848f148522476af5e7dad7a83', NULL, '2016-02-16 21:20:10', '2016-02-16 21:20:27', 1, 1, 'guestHandle291@palacegate', 'palacegate', 0),
+(1514, NULL, NULL, NULL, 'd1cb37c8e1938778e223458feebb540b', 'b1e7b567606834066d7034a87d6f4ce1', NULL, '2016-02-24 20:47:39', '2016-02-24 20:53:26', 1, 1, 'guestHandle292@palacegate', 'palacegate', 0),
+(1515, NULL, NULL, NULL, '66c03b901454b8aa4dd2341e4cf74aa2', 'e3736b2e49905bc49270ef9b35399c1c', NULL, '2016-03-02 22:02:49', '2016-03-02 22:12:17', 1, 1, 'guestHandle293@palacegate', 'palacegate', 0),
+(1516, NULL, NULL, NULL, '55899aa3da3e2e62434dc35071020012', '4f7a372b3d02ce987fdd5a208c09acbc', NULL, '2016-03-08 18:41:24', '2016-03-08 18:44:11', 1, 1, 'guestHandle294@palacegate', 'palacegate', 0),
+(1517, NULL, NULL, NULL, '845e4b1b4dae55402695b93249524c81', 'b97a88eae27d0d61a818f7767ef72aef', NULL, '2016-03-08 18:42:55', '2016-03-08 18:42:55', 1, 2, 'guestHandle295@palacegate', 'palacegate', 0),
+(1518, NULL, NULL, NULL, '7dfc88d7193c5e4c942b55f0ea0ec884', 'd5aca2e258375bb5cbf9bebd5af5725d', NULL, '2016-03-08 18:42:57', '2016-03-08 18:42:57', 1, 2, 'guestHandle296@palacegate', 'palacegate', 0),
+(1519, NULL, NULL, NULL, '805af595f9b344e32b7dbc6bedfb0264', '5fed4c34a2023561cbd0c946ae8bfd74', NULL, '2016-03-08 21:54:40', '2016-03-08 22:00:19', 1, 1, 'guestHandle297@palacegate', 'palacegate', 0),
+(1520, NULL, NULL, NULL, '1ad68cacd8ac2f0083810e85e5cc87a9', 'da9c525159d0de23a47be5a99a1002ba', NULL, '2016-03-10 03:31:30', '2016-03-10 03:33:52', 1, 1, 'guestHandle298@palacegate', 'palacegate', 0),
+(1521, NULL, NULL, NULL, 'b760e397b6278e7038eee97a5909d8fc', '085b73507d78ed3a67cdade84c8824cf', NULL, '2016-03-28 03:19:53', '2016-03-28 03:19:53', 1, 1, 'guestHandle299@palacegate', 'palacegate', 0),
+(1522, NULL, NULL, NULL, '9158defbc2035ebf31f5ae9ea76a184a', '035e23afc6da5774f89a310d777b16f8', NULL, '2016-03-29 22:31:54', '2016-03-30 02:30:52', 1, 1, 'guestHandle300@palacegate', 'palacegate', 0),
+(1523, NULL, NULL, NULL, '92be724a1f78ad635b7d47738e467018', '46bddad2e185a31ab902fcde9715c563', NULL, '2016-03-31 17:50:55', '2016-03-31 17:56:01', 1, 1, 'guestHandle301@palacegate', 'palacegate', 0),
+(1524, NULL, NULL, NULL, '64866063428b8d9885c1e3c4c6546a20', '37338cb006afcef3ac62ff42ba05b6af', NULL, '2016-04-22 07:24:52', '2016-04-22 08:38:36', 1, 1, 'guestHandle302@palacegate', 'palacegate', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `simplerun`
+--
+
+CREATE TABLE IF NOT EXISTS `simplerun` (
+  `pk_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `run_uri` varchar(300) NOT NULL,
+  `start_time` time NOT NULL,
+  `complete_time` time NOT NULL,
+  `user_id` varchar(20) NOT NULL,
+  PRIMARY KEY (`pk_ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+
+--
+-- Dumping data for table `simplerun`
+--
+
+INSERT INTO `simplerun` (`pk_ID`, `run_uri`, `start_time`, `complete_time`, `user_id`) VALUES
+(4, '/webtools/jav_tools/extended_pages/help_center.php', '00:00:00', '16:13:19', ''),
+(5, '/webtools/jav_tools/extended_pages/help_center.php', '15:00:03', '00:00:00', ''),
+(6, '/changed/testnewrun.php', '15:33:58', '00:00:00', ''),
+(7, '/webtools/testnewrun.php', '15:46:52', '00:00:00', ''),
+(8, '/webtools/testnewrun.php', '15:47:33', '00:00:00', ''),
+(9, '/webtools/testnewrun.php', '15:47:43', '00:00:00', ''),
+(11, '/webtools/testnewrun.php', '16:09:41', '00:00:00', ''),
+(12, '/webtools/testnewrun.php', '16:10:06', '00:00:00', ''),
+(13, '/webtools/testnewrun.php', '16:15:49', '00:00:00', ''),
+(14, '/webtools/testnewrun.php', '16:15:57', '00:00:00', ''),
+(15, '/webtools/testnewrun.php', '16:16:27', '00:00:00', ''),
+(16, '/webtools/testnewrun.php', '16:17:38', '16:17:38', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `subscriptions`
+--
+
+CREATE TABLE IF NOT EXISTS `subscriptions` (
+  `pk_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `fk_host_k_name` varchar(16) NOT NULL,
+  `fk_app_k_name` varchar(16) NOT NULL,
+  `subscribed_date` datetime NOT NULL,
+  `build_dump_file_loc` varchar(120) NOT NULL,
+  `last_update` datetime NOT NULL,
+  `access_key` varchar(40) NOT NULL,
+  `current_rev` varchar(20) NOT NULL,
+  PRIMARY KEY (`pk_ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28 ;
+
+--
+-- Dumping data for table `subscriptions`
+--
+
+INSERT INTO `subscriptions` (`pk_ID`, `fk_host_k_name`, `fk_app_k_name`, `subscribed_date`, `build_dump_file_loc`, `last_update`, `access_key`, `current_rev`) VALUES
+(10, 'organizations', 'organizations', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '749c78214372a18b2518d8387706e155', ''),
+(11, 'metalfreaks', 'metalfreaks', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '4858567392fb1938af787abd09f1032a', ''),
+(12, 'metalfreaks', 'myfirstapp', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '19829e3caa418c40961b355dc40b8c97', ''),
+(13, 'root', 'tools', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 'b5345049e68659ecd791f2c58c60470b', ''),
+(14, 'palacegate', 'palacegate', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 'c46868acff949ddb4dbd0a27ba03e55b', ''),
+(15, 'palacegate', 'applications', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '18f0fef96cb52e6b55a951d38941e8ab', ''),
+(16, 'palacegate', 'organizations', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '9e5d6c764eb22a77e21ea9d6face42a5', ''),
+(17, 'palacegate', 'profiles', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 'd9fe413f84cc3f4ce62fd9cf7e5a9044', ''),
+(18, 'applications', 'crumb', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '4c58d9af5338148effc317145b7709aa', ''),
+(19, 'metalfreaks', 'crumb', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '5ce7c8f2aff97abf33a8a694b2a428d4', ''),
+(20, 'organizations', 'crumb', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 'a972d58a8eab810d6c3dec36be017173', ''),
+(21, 'palacegate', 'crumb', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '9a236621b526005901d65ea2836b20b1', ''),
+(22, 'profiles', 'crumb', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '93075bb6175378507a7e7681ee13f9f0', ''),
+(23, 'root', 'crumb', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '13ac40041d2a00b06dc3fbd81ce1fb94', ''),
+(24, 'stools', 'crumb', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '836b89981722c0b37d503156c514d63b', ''),
+(25, 'palacegate', 'tools', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '760507a75ae4517f21ffd22f8989f698', ''),
+(26, 'tools', 'palacegate', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', 'aec01cefc18260bdcffd92fc1702f52a', ''),
+(27, 'palacegate', 'crosscutproperti', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '22e5a785276e995a120d6660c6fbbe06', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `SYSAPPLOOK`
+--
+
+CREATE TABLE IF NOT EXISTS `SYSAPPLOOK` (
+  `PK_ID` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`PK_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `TOOLSETINDEX`
+--
+
+CREATE TABLE IF NOT EXISTS `TOOLSETINDEX` (
+  `PKID` int(11) NOT NULL AUTO_INCREMENT,
+  `NAME` varchar(30) NOT NULL,
+  `DESCRIPTION` varchar(500) NOT NULL,
+  `BASEDIRECTORY` varchar(150) NOT NULL,
+  `ITEMCOUNT` int(11) NOT NULL DEFAULT '0',
+  `RESTRICTTOAPPSOFTYPE` varchar(3) NOT NULL DEFAULT 'all',
+  `LASTUPDATEDBYUSERID` int(11) NOT NULL,
+  `LASTUPDATEDBYUSERNAME` varchar(20) NOT NULL,
+  `OWNEDUNDERORGID` int(11) NOT NULL,
+  `OWNEDUNDERORGNAME` varchar(20) NOT NULL,
+  `LASTTOOLCREATERID` int(11) NOT NULL,
+  `TOOLCHANGELOGNAME` varchar(200) NOT NULL,
+  `RESTRICTTOOWNERSAPPS` tinyint(3) NOT NULL DEFAULT '0',
+  `LOCKKEY` int(11) NOT NULL,
+  PRIMARY KEY (`PKID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='holds info about tools that can be used by many apps' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `TOOLSETITEMS`
+--
+
+CREATE TABLE IF NOT EXISTS `TOOLSETITEMS` (
+  `PKID` int(11) NOT NULL AUTO_INCREMENT,
+  `FKTOOLSETID` int(11) NOT NULL,
+  `NAME` varchar(30) NOT NULL,
+  `EXTENSION` varchar(30) NOT NULL,
+  `RESOURCELOC` varchar(200) NOT NULL,
+  PRIMARY KEY (`PKID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `TOOLSUBSCRIPTIONS`
+--
+
+CREATE TABLE IF NOT EXISTS `TOOLSUBSCRIPTIONS` (
+  `PK_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `FK_TOOLSETID` int(11) NOT NULL,
+  `ACCESS_KEY` int(11) NOT NULL,
+  `FK_APP_NAME` varchar(200) NOT NULL,
+  `FK_APP_ID` int(11) NOT NULL,
+  `FK_TOOLSET_NAME` varchar(200) NOT NULL,
+  PRIMARY KEY (`PK_ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `PKID` int(11) NOT NULL AUTO_INCREMENT,
+  `UNAM` varchar(30) DEFAULT NULL,
+  `FNAM` varchar(30) DEFAULT NULL,
+  `MNAM` varchar(30) DEFAULT NULL,
+  `LNAM` varchar(30) DEFAULT NULL,
+  `PNUM` varchar(30) DEFAULT NULL,
+  `EMAIL` varchar(30) DEFAULT NULL,
+  `ISVERIFIED` tinyint(4) DEFAULT NULL,
+  `AUTHNUMOTH` varchar(30) DEFAULT NULL,
+  `EMAILEDAUTHCODE` varchar(7) NOT NULL,
+  `ISACTIVE` tinyint(4) NOT NULL COMMENT 'RESERVE THE RIGHT TO DEACTIVATE A USER',
+  PRIMARY KEY (`PKID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='contains main user information' AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`PKID`, `UNAM`, `FNAM`, `MNAM`, `LNAM`, `PNUM`, `EMAIL`, `ISVERIFIED`, `AUTHNUMOTH`, `EMAILEDAUTHCODE`, `ISACTIVE`) VALUES
+(2, 'hybrid', 'Shawn', 'Nicholas', 'Stark', '612-293-8764', 'starsnic@gmail.com', 1, NULL, '9999999', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xfls`
+--
+
+CREATE TABLE IF NOT EXISTS `xfls` (
+  `pk_FLID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `FLNAM` varchar(20) NOT NULL,
+  `FLCRTDATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'date and time file was entered into database',
+  `FLUPD` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `FLTYP` varchar(15) NOT NULL,
+  `FLEXT` varchar(5) NOT NULL,
+  `FLNOTE` varchar(250) NOT NULL,
+  `fk_FLBLDID` int(10) unsigned NOT NULL,
+  `FLLOC` varchar(45) NOT NULL,
+  `FLSTAT` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'true = active\r\nfalse = non-active',
+  `FLCOMPSTAT` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'false means this file can not be compiled default false',
+  PRIMARY KEY (`pk_FLID`),
+  KEY `fk_FLBLDID` (`fk_FLBLDID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xusr`
+--
+
+CREATE TABLE IF NOT EXISTS `xusr` (
+  `pk_UID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `UCRTDATE` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'The date and time user was entered',
+  `UUPD` timestamp NOT NULL DEFAULT '2009-02-12 06:00:00' COMMENT 'The day and time the user was last updated',
+  `UTYP` varchar(5) NOT NULL,
+  `USTAT` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'true = active\r\nfalse = non-active',
+  `UDSPNAM` varchar(10) NOT NULL,
+  `UPASS` varchar(45) NOT NULL,
+  `UFNAM` varchar(25) NOT NULL,
+  `ULNAM` varchar(25) NOT NULL,
+  `USIRNAM` varchar(4) NOT NULL,
+  `UCMPNY` varchar(45) NOT NULL,
+  `UTITLE` varchar(20) NOT NULL,
+  `UWEBSITE` varchar(45) NOT NULL DEFAULT '',
+  `UEML` varchar(45) NOT NULL,
+  `UCITY` varchar(20) NOT NULL,
+  `USTATE` varchar(2) NOT NULL COMMENT 'not to be confused with status',
+  `UZCOD` varchar(10) NOT NULL,
+  `UCTRY` varchar(2) NOT NULL COMMENT 'not to be confused with century',
+  `UINTRO` varchar(250) NOT NULL DEFAULT '',
+  `UPICURL` varchar(45) NOT NULL DEFAULT '',
+  `UPREPPED` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'If email successfuly sends for confirmation set to true',
+  PRIMARY KEY (`pk_UID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=80 ;
+
+--
+-- Dumping data for table `xusr`
+--
+
+INSERT INTO `xusr` (`pk_UID`, `UCRTDATE`, `UUPD`, `UTYP`, `USTAT`, `UDSPNAM`, `UPASS`, `UFNAM`, `ULNAM`, `USIRNAM`, `UCMPNY`, `UTITLE`, `UWEBSITE`, `UEML`, `UCITY`, `USTATE`, `UZCOD`, `UCTRY`, `UINTRO`, `UPICURL`, `UPREPPED`) VALUES
+(79, '2009-05-14 22:33:21', '2009-02-12 06:00:00', 'user', 0, 'khugga', 'lighter', 'Shawn', 'Stark', 'Mr', ' Shawns Form Company', 'Owner', 'shawnstarlk.com', 's.nicholas.mrstark@gmail.com', 'Osceola', 'AL', '54020', 'US', 'somthing better out beond those neon lights', 'Pic url', 0);
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

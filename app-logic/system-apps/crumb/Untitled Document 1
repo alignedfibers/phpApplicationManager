@@ -1,0 +1,5 @@
+<html>
+<body>
+<div id="systembar" style="float:right; width:250px; border:solid #000000;">
+<div><<img src="/<?php runstat::$host?>/system/images/afootprint.png" alt="Foot Print" /> </div>
+</div>

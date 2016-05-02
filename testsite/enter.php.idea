@@ -1,0 +1,17 @@
+<?php
+function callback(){} //
+function get_execution_time(){}
+function identify_request(){} //identity required for run to track errors
+function init_error_store(){} //kill err occurs b4 sesscreate then handle + dump reqid used
+function init_dataobj_store(){}  //inits dynamically expandable object to hold objs for data only
+function include_lib_assertions(){} //assertions used in functions for quality and err define
+function include_standard_libs(){}  //standard libs process against local data - no hw / net
+function include_interface_libs(){} //interface libs process -netadpt -dbadpt -fsadpt -askme
+function init_ob(){}                //initializes callback function for buffer commit
+function create_config_vars_from_json(){}
+function create_test_data_from_json(){}
+function create_env_vars_from_json(){}
+function cookie_verify(){}
+function init_session(){}
+
+?>

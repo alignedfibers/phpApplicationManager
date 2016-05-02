@@ -1,0 +1,45 @@
+		//json_req should contain:
+		// : URI
+		// : DOMAIN
+		// : BASE_URI_PART
+		//THIS SHOULD RETURN JSON FORMAT  -- INFO AVAILABLE TO APPLICATION
+		// : LOCAL_APP_PATH															STRING
+		// : SUBSCRIPTION_STATE													BOOL
+		// : SUBSCRIPTION_VALID_FROM_DATE								TIMESTAMP  defualts 00-00-000-00.00.00.00
+		// : SUBSCRIPTION_VALID_TO_DATE									TIMESTAMP  defaults 00-00-000-00.00.00.00
+		// : PROVIDER_DISPLAY_NAME 											STRING
+		// : PROVIDER_ID																	STRING
+		// : APPLICATION_DISPLAY_NAME										STRING
+		// : APPLICATION_ID																STRING
+		// : APP_DATA_PATH_PROVIDER											STRING
+		// : APP_DATA_PATH_APPLICATION             						STRING
+		// : APP_DATA_PATH_USER_PROVIDER_CIRCLE 				STRING
+		// : APP_RESOURCE_DB_NAME											STRING
+		// : PROVIDER_SPECIFIC_APP_DB_NAME							STRING
+		// : PARRAMETER_VALUE_PAIRS										STRING
+		// : PROVIDER_OWNER_DISPLAY_NAME								STRING
+		// : PROVIDER_TECHNICAL_CONTACT_DISPLAY_NAME		STRING
+		// : TECHNICAL_CONTACT_EMAIL											STRING
+		// A CIRCLES RESOURCE WILL BE REQUESTED FROM ANOTHER SERVER - DUE TO AUTHORIZATION MANAGEMENT CIRCLES ARE MANAGEABLE ACROSS APPS
+		// APPLICATIONS CAN NOT HAVE DIRECT ACCESS TO THOSE FEATURES
+		// APPLICATIONS MUST HAVE IMPORT.yaml configured to access interface tools and other shared tools - if these have map (aka viewable) then must be in resourcedb
+		// IMPORTS HANDLED OVER LOCAL CURL ONLY to enforce tool sets for different access level applications no includes allowed
+		// autoload in app_location should load everything needed per map {standardoverhead, map_specific libs (aka controllers tools helpers)}
+		//json format transmitted over socket
+		//executable transmitted via curl -- php thing
+		//applications have a build file with versions exc.. this is automated to dump to DB on change
+		// all modules objects and interfaces should have a dependency meeting - ensures that required is loaded
+		// applications may have there own server at some point in time.
+		
+				//Application loads as normally planned
+		//Users data directory for that application in consideration for alternative load methods
+		// 1. symlink 2. cache all 3. restrict user access make users for webapps 4.  userdata service - using authentication from session and provider from map
+		// Stopping all generic includes and requires --  loadstrap with perl -- onetime autoloader only loads what's in config -- application cannot read it. 
+		// Just move on to USING CGI an NGINX CGI CALL php PIPE source to PHP interpreter --- do not rely on apache -- control all interpreter commands yourself
+		// executing a php string does not require the use of the php eval function  --- run everything as  a python or perl application --- use php in the delegated apps
+		// Do not use php in the overhead system -- create a sandbox inside the overhead -- 
+		
+					// It is important that everything is an application  --  a root application has only one view
+			// It's job is to provide a short description and information about the provider, and a menu with 
+			// links to the applications that it delegates -- there is an app for everything -- if not it's probably not allowed
+			// 

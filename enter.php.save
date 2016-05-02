@@ -1,0 +1,3 @@
+<?php
+run_ob_init_tes()
+?>

@@ -1,0 +1,13 @@
+<?php
+header("Content-type: image/png");
+if(isset($_GET['from']) && $_GET['from'] == 'app' && isset($_GET['name'])){
+echo "set stat";
+runstat::$nohf=true;
+readfile(runstat::$root."/sapps/system/images".$_GET['name']);
+}
+runstat::respond();
+?>
+
+kjahdfiouahfouilka,sncjfdoiioajnjklmnschdfnjknjknkjsadkjhkascdf
+
+
