@@ -1,8 +1,3 @@
-This is a distributed session management and app runid manager.
-It is also a php router/loader with single entrypoint
-It is also a built in custom error handler that aims to provide
-remedial and error description from db when error is called
-
 - To get running use the database_dump to init tables + sample data
 
 - root directory for app is hardcoded in bootstrap/runstatV3-2.php
