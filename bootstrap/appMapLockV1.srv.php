@@ -1,7 +1,5 @@
 <?php
 class appMapLock {
-// Lookfor -- badballoon -- hotballoon -- nowballo0n
-//javascript style only this way we locate not a resource but a shawn abastracted youx
         protected final function __construct() {
                 $this->init();
         }
