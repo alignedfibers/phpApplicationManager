@@ -2,7 +2,7 @@
 	/**
 	 *Public vars from the boot strap
 	 **/
-	public static $client = null;   ///format: userhandle@orgname.{pub,stage}
+	public static $client = null;   ///format: userhandle@orgname
 	public static $accessor = null; ///resource provider, userhandle@orgname:appname
 
 	public static $statelessId = null;  ///identify connection
