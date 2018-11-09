@@ -1,5 +1,9 @@
 <?php
 class appMapLock {
+	/*************************
+	This was intended to start delivering applications 
+	via ajax and is not complete or implemented.
+	****************************************/
         protected final function __construct() {
                 $this->init();
         }
