@@ -9,16 +9,16 @@
 	public static $statefullId = null;  ///identify TCP/IP socket connection
  	public static $runcontinued = false;///indicate run has broken - REMOVE
 
-	public static $resource;                ///locate resource 
-	public static $clientKey = null;        ///             md5 in >>>>
-	public static $sessionHandle = null;    ///<<<<md5 out  
+	public static $resource;                
+	public static $clientKey = null;        
+	public static $sessionHandle = null;     
 	public static $isGuest = null;       	///says: I am not persistent
 	
-	public static $isSearchEngine;		///should set engine name as user, public access
-	public static $calledUrl;		/// -REMOVE and use local var.. maybe need it
+	public static $isSearchEngine;		///should set engine name as user, crawler
+	public static $calledUrl;		
 	public static $reqMap;
-	public static $resumeRun;	///resume last run, update stateless_id..done auto -REMOVE
-	public static $updStatelessId;	/// use local working var -REMOVE
+	public static $resumeRun;	///resume last run, update stateless_id
+	public static $updStatelessId;	
 	public static $userHandle;
 	public static $benchType;            ///can be {update_bench,new_bench}
 	public static $isChannel;  
